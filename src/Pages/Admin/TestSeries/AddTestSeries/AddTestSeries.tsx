@@ -91,7 +91,7 @@ const AddTestSeries = () => {
     formState: { errors },
   } = useForm<FormValues>();
 
-  // const image = watch("p_image");
+  const ts_id = watch("ts_id");
   // console.log(image);
   const isTopicSelected = (topicId: string, selectedTopics: string[]) =>
     selectedTopics.includes(topicId);
@@ -509,6 +509,7 @@ const AddTestSeries = () => {
         handleClose={handleClose}
         // handleSubmit={handleSubmit}
         // setCsvData={setCsvData}
+        ts_id ={ts_id}
         restAddProduct={reset}
         data={data}
         categoryObj={category}

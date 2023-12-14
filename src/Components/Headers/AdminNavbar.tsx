@@ -125,7 +125,7 @@ const AdminNavbar = () => {
         <Box
           sx={{
             width: { xs: "120px", sm: "120px", md: "200px" },
-            height: { xs: "66px", sm: "66px", md: "100px" },
+            height: { xs: "66px", sm: "66px", md: "71px" },
           }}
         >
           <Link to="/user/">
@@ -140,7 +140,7 @@ const AdminNavbar = () => {
           direction="row"
           padding={1}
         >
-          <Link to="/admin/profile">
+          {/* <Link to="/admin/profile">
             <PIButton
               css={{
                 p: "2px",
@@ -148,7 +148,7 @@ const AdminNavbar = () => {
                 width: { md: "60px", sm: "40px", xs: "30px", lg: "50px" },
               }}
             />
-          </Link>
+          </Link> */}
           <SIButton
             css={{
               p: "2px",

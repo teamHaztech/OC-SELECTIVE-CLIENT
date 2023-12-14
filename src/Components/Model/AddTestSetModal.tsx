@@ -43,6 +43,7 @@ interface ModalProps {
   open: boolean;
   categoryObj: any;
   data: any;
+  ts_id?: any;
 }
 
 const AddTestSetModal = ({
@@ -51,6 +52,7 @@ const AddTestSetModal = ({
   data,
   categoryObj,
   restAddProduct,
+  ts_id,
 }: //   handleSubmit,
 ModalProps) => {
   // const [result, setResult] = useState<any>(null);
@@ -202,10 +204,12 @@ ModalProps) => {
                           // cacheOptions
                           // defaultOptions
                           options={
-                            item.topics.map((item: any) => ({
-                              value: item.id,
-                              label: item.t_name,
-                            })) || []
+                            item.topics
+                              .filter((topic: any) => topic.ts_id == ts_id)
+                              .map((filteredTopic: any) => ({
+                                value: filteredTopic.id,
+                                label: filteredTopic.t_name,
+                              })) || []
                           }
                           placeholder={`Select ${item.tsc_type} Topic`}
                         />

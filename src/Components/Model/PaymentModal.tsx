@@ -27,7 +27,7 @@ const Checkout = ({
   const [ErrorMessage, setErrorMessage] = useState("");
   const [orderID, setOrderID] = useState("");
   const navigate = useNavigate();
-  console.log(amount);
+
 
   const purchaseMU = useMutation({
     mutationFn: async ({
@@ -58,11 +58,12 @@ const Checkout = ({
   });
 
   const createOrder = (data: any, actions: any) => {
+    console.log("ssssssssssss"+amount);
     return actions.order
       .create({
         purchase_units: [
           {
-            // description: "Sunflower",
+            description: "Payment for package",
             amount: {
               currency_code: "USD",
               value: amount,

@@ -205,15 +205,11 @@ const MathGen = ({
       let query = "";
 
       if (testType == 2) {
-        query = `Generate ${totalQuestions} unique and exceptionally challenging advanced-level practice questions designed for 25-year-old college students preparing for an aptitude exam on the topic of ${topic} that should be extremely difficult, requiring a high IQ of 140 and above.
+        query = `Generate total ${totalQuestions} unique and exceptionally challenging advanced-level practice questions designed for 25-year-old college students preparing for an aptitude exam on the topic of ${topic} that should be extremely difficult, requiring a high IQ of 140 and above.
 
         Criteria:
-        - Scenario: Each question should intricately incorporate a real-life story or scenario related to the topic, making it profoundly contextually rich and engaging.no limit in how long the question is
-        - Clarity: Craft questions that are not only clear and concise but also feature intricate details that demand careful consideration from the students.
-        - Diversity: Create a diverse set of questions covering various nuanced aspects of the topic to ensure a comprehensive and thorough preparation experience.
-        - Options: Formulate four multiple-choice answer options (A, B, C, and D) for each question, challenging students' knowledge and pushing their problem-solving skills to the limit.
+        - Scenario: Each question should intricately incorporate a real-life story or scenario related to the topic, making it profoundly contextually rich and engaging.No limit in how long the question is.
         - Complexity: Ensure that the questions are not just challenging, but they should demand an exceptional level of critical thinking and intellectual prowess, reflecting the highest standards of advanced-level aptitude exams.
-        - Answer: Provide the correct answer options (A, B, C, and D) for each question based on the intricacies of the scenario and sophisticated calculations.
         - Explanation: Furnish a detailed and elaborate explanation for the correct answer to help students comprehend the underlying concepts, encouraging a deep understanding of the subject matter.
         
         Names:
@@ -233,20 +229,20 @@ const MathGen = ({
             "Answer": "Specify the correct option (A, B, C, or D) based on the scenario and calculations.",
             "Explanation": "Provide an in-depth and comprehensive explanation for the correct answer, unraveling the intricate details of the scenario and solution."
           },
-           generate ${totalQuestions-2}  more like this 
+          ......
+           generate ${totalQuestions-1}  more like this and in total ${totalQuestions}
+           
         ]
         `;
         
       } else {
-        query = `Generate ${totalQuestions} unique and challenging beginner-level practice word questions designed for 25 college year students who are preparing for an aptitude exam on the topic of ${topic}. Each question should be based on real-life scenarios, and no limit in how long the question is. 
+        query = `Generate ${totalQuestions} unique and challenging advanced-level practice word questions designed for 25 college year students who are preparing for an aptitude exam on the topic of ${topic}. Each question should be based on real-life scenarios, and no limit in how long the question is. 
         Ensure the following criteria for each question:
 
         1. Scenario: Incorporate a real-life scenario that relates to the topic and makes the question contextually rich.
         2. Clarity: Craft questions that are clear, concise, and easily understandable for 25 college year students.
         3. Diversity: Create a diverse set of questions that cover various aspects of the topic.
-        4. Options: Formulate four multiple-choice answer options (A, B, C, and D) for each question.
         5. Complexity: Ensure that answer choices are complex and require critical thinking.
-        6. Answer: Provide a correct answer options (A, B, C, and D) based on the question.
         7. Explanation: Provide a detailed explanation for the correct answer to help students understand the concepts.
 
         Names:
@@ -265,8 +261,9 @@ const MathGen = ({
         "Answer": "Correct answer letter (a, b, c, or d)",
         "Explanation": "Detailed explanation for the correct answer"
       },
-      generate ${totalQuestions-2}  more like this 
-    
+      ......
+      generate ${totalQuestions-1} more like this 
+      
    
     ]
     `;

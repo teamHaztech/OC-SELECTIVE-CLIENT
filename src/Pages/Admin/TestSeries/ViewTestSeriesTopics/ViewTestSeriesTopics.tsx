@@ -94,7 +94,7 @@ const ViewTestSeriesTopics = () => {
         <TabContext value={value}>
           <Box sx={{ borderBottom: 2, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="Tabs">
-              {testSeries?.data?.tsc.map((item: any) => (
+              {testSeries?.data?.tsc?.map((item: any) => (
                 <Tab
                   label={item.tsc_type}
                   value={JSON.stringify(item.id)}

@@ -107,11 +107,19 @@ type questions = {
     b: string;
     c: string;
     d: string;
+    e: string;
+    f: string;
+    g: string;
+    h: string;
   };
   option_1?: any;
   option_2?: any;
   option_3?: any;
   option_4?: any;
+  option_5?: any;
+  option_6?: any;
+  option_7?: any;
+  option_8?: any;
   Answer?: string;
   Explanation?: string;
   Conversation?: string;
@@ -220,6 +228,26 @@ const ReadingPDF = ({ props }: any) => {
                         <p style={styles.options}>{`B. ${item?.Options?.b}`}</p>
                         <p style={styles.options}>{`C. ${item?.Options?.c}`}</p>
                         <p style={styles.options}>{`D. ${item?.Options?.d}`}</p>
+                        {item?.Options?.e && (
+                          <p
+                            style={styles.options}
+                          >{`A. ${item?.Options?.a}`}</p>
+                        )}
+                        {item?.Options?.f && (
+                          <p
+                            style={styles.options}
+                          >{`B. ${item?.Options?.b}`}</p>
+                        )}
+                        {item?.Options?.g && (
+                          <p
+                            style={styles.options}
+                          >{`C. ${item?.Options?.c}`}</p>
+                        )}
+                        {item?.Options?.h && (
+                          <p
+                            style={styles.options}
+                          >{`D. ${item?.Options?.d}`}</p>
+                        )}
                       </div>
                     </>
                   ) : (
@@ -294,6 +322,38 @@ const ReadingPDF = ({ props }: any) => {
                             {`${item?.option_4}`}
                           </span>
                         </Typography>
+                        {item?.option_5 && (
+                          <Typography>
+                            <span>
+                              <strong>E </strong>
+                              {`${item?.option_5}`}
+                            </span>
+                          </Typography>
+                        )}
+                        {item?.option_6 && (
+                          <Typography>
+                            <span>
+                              <strong>F </strong>
+                              {`${item?.option_6}`}
+                            </span>
+                          </Typography>
+                        )}
+                        {item?.option_7 && (
+                          <Typography>
+                            <span>
+                              <strong>G </strong>
+                              {`${item?.option_7}`}
+                            </span>
+                          </Typography>
+                        )}
+                        {item?.option_8 && (
+                          <Typography>
+                            <span>
+                              <strong>H </strong>
+                              {`${item?.option_8}`}
+                            </span>
+                          </Typography>
+                        )}
                       </Stack>
                     </Stack>
                   )}

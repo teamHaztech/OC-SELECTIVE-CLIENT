@@ -39,6 +39,7 @@ const ProfileEditModal = () => {
   } = UserContext();
   const { register, handleSubmit } = useForm<Inputs>();
   
+
   const [profileData, setProfileData] = useState<Inputs | null>(null);
   const queryClient = useQueryClient();
   const data: user | undefined = queryClient.getQueryData([
@@ -54,16 +55,18 @@ const ProfileEditModal = () => {
     },
     onSuccess: (res) => {
       console.log(res.data.data);
-      
+
       if (res.status === 200) {
         updateUser(res.data.data);
-        dispatch({ type: "SET_dataSubmit", payload: false });
-        handlePE2Close();
+        // dispatch({ type: "SET_dataSubmit", payload: false });
+        // handlePE2Close();
+        handlePEClose();
         handlePESuccessOpen();
         queryClient.setQueryData(["user-profile-data"], res.data.data);
       }
     },
   });
+  console.log(updateUserMu.isLoading);
   // const { data, isLoading } = useQuery(["user-data", user], async () => {
   //   return await tokenAxios.get("/user");
   // });
@@ -76,8 +79,11 @@ const ProfileEditModal = () => {
   }, [dataSubmit]);
 
   const onSubmit: SubmitHandler<Inputs> = async (para_data: Inputs) => {
-    handlePEClose();
-    handlePE2Open();
+    // handlePEClose();
+    // handlePE2Open();
+    updateUserMu.mutate(para_data);
+    console.log(para_data);
+
     setProfileData(para_data);
   };
 
@@ -146,7 +152,12 @@ const ProfileEditModal = () => {
                 css={{ width: "177px" }}
                 func={handlePEClose}
               />
-              <OButton name="NEXT" css={{ width: "177px" }} type="submit" />
+              <OButton
+                name={updateUserMu.isLoading ? "...." : "Submit"}
+                css={{ width: "177px" }}
+                disabled ={updateUserMu.isLoading }
+                type={"submit" }
+              />
             </Stack>
           </Stack>
         </form>

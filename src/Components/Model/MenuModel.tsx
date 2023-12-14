@@ -1,11 +1,12 @@
 import { Menu, MenuItem, Stack } from "@mui/material";
 import { ReactElement } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useParams,Path} from "react-router-dom";
 import { ParaText1 } from "../Common/ParaText";
 import PersonIcon from "@mui/icons-material/Person";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import { UserContext } from "../../Context/UserContext";
+import { AppContext } from "../../Context/AppContext";
 const pCss = {
   height: "38px",
   width: "38px",
@@ -27,7 +28,12 @@ const sCss = {
 // }
 
 const MenuModel = () => {
-  const { handleMenuOpen, handlePCOpen,handleCloseUserMenu,anchorElUser } = UserContext();
+  // const { user } = AppContext();
+  const { handleMenuOpen, handlePCOpen, handleCloseUserMenu, anchorElUser } =
+    UserContext();
+    const url = window.location.href;
+    let user = url?.split("#")[1]?.split("/")[1];
+   
   return (
     <Menu
       sx={{
@@ -57,12 +63,14 @@ const MenuModel = () => {
           </Stack>
         </Link>
       </MenuItem> */}
-      <MenuItem onClick={handlePCOpen}>
-        <Stack spacing={1} direction="row">
-          <LockOutlinedIcon sx={sCss} />
-          <ParaText1 text="Change Password" />
-        </Stack>
-      </MenuItem>
+      {user  == "user" && (
+        <MenuItem onClick={handlePCOpen}>
+          <Stack spacing={1} direction="row">
+            <LockOutlinedIcon sx={sCss} />
+            <ParaText1 text="Change Password" />
+          </Stack>
+        </MenuItem>
+      )}
       <MenuItem onClick={handleMenuOpen}>
         <Stack spacing={1} direction="row">
           <ExitToAppOutlinedIcon sx={sCss} />
