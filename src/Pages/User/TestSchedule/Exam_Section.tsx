@@ -54,22 +54,22 @@ type questionType = {
   };
 };
 const Exam_Section = () => {
-  // document.addEventListener('contextmenu', (e:any) => e.preventDefault());
+  document.addEventListener('contextmenu', (e:any) => e.preventDefault());
 
-  // function ctrlShiftKey(e:any, keyCode:any) {
-  //   return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
-  // }
+  function ctrlShiftKey(e:any, keyCode:any) {
+    return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+  }
 
-  // document.onkeydown = (e:any) => {
-  //   if (
+  document.onkeydown = (e:any) => {
+    if (
 
-  //     ctrlShiftKey(e, 'I') ||
-  //     ctrlShiftKey(e, 'J') ||
-  //     ctrlShiftKey(e, 'C') ||
-  //     (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))
-  //   )
-  //     return false;
-  // };
+      ctrlShiftKey(e, 'I') ||
+      ctrlShiftKey(e, 'J') ||
+      ctrlShiftKey(e, 'C') ||
+      (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))
+    )
+      return false;
+  };
 
   const preventCopyPaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
     e.preventDefault();
