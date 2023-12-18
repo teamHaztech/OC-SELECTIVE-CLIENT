@@ -205,7 +205,7 @@ ModalProps) => {
                           // defaultOptions
                           options={
                             item.topics
-                              .filter((topic: any) => topic.ts_id === ts_id)
+                              .filter((topic: any) => topic.ts_id == ts_id)
                               .map((filteredTopic: any) => ({
                                 value: filteredTopic.id,
                                 label: filteredTopic.t_name,
