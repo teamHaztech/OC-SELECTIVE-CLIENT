@@ -26,7 +26,7 @@ type mapData = {
   Explanation: string;
   Options: string[];
   Question: string;
-  images?: string[];
+  images: string[];
 };
 
 interface ThinkingProps {
@@ -423,12 +423,12 @@ console.log(Math.round(totalQuestions/csvData.length),csvData.length,totalQuesti
 
           item.images = [];
           let count: number = 1;
-          console.log(item.images?.length);
+          // console.log(item.images?.length);
 
           // if (item.images?.length !== 2) {
           // if (exists) {
             maleNames.forEach((search: string) => {
-              if (item.images?.length === 2) {
+              if (item.images.length <= 2) {
                 return true; // Exit the loop
               }
               const caps = search.toUpperCase();
@@ -458,8 +458,8 @@ console.log(Math.round(totalQuestions/csvData.length),csvData.length,totalQuesti
               return count == 3;
             });
             femaleNames.forEach((search: string) => {
-              if (item.images?.length === 2) {
-                return true; // Exit the loop
+              if (item.images.length <= 2) {
+                return true; 
               }
               const caps = search.toUpperCase();
               const match = data.find(
@@ -506,9 +506,9 @@ console.log(Math.round(totalQuestions/csvData.length),csvData.length,totalQuesti
           // }
           // console.log(male,female);
 
-          if (item.images?.length === 0) {
-            delete item.images;
-          }
+          // if (item.images.length === 0) {
+          //   delete item.images;
+          // }
 
           responses.push(item); // Add the modified item to the responses array
         });
