@@ -106,7 +106,7 @@ const ViewFirstSection = ({ data }: any) => {
         /> */}
         <Stack
           sx={{
-            flexDirection: {sm:"row",xs:"column"},
+            flexDirection: { sm: "row", xs: "column" },
             justifyContent: "space-around",
             border: 1,
           }}
@@ -161,11 +161,11 @@ const ViewFirstSection = ({ data }: any) => {
           sx={{ width: "80%", m: "auto", my: "15px" }}
           spacing={5}
         >
-          <OButton
+          {/* <OButton
             name={getTopicMutation.isLoading ? "Loading..." : "Buy Topics"}
             func={getTopicMutation.mutate}
             css={{ maxWidth: "50%" }}
-          />
+          /> */}
           <Link
             to={`/user/Test-result-analysis/solution/${result?.id}`}
             style={{ maxWidth: "50%" }}

@@ -125,7 +125,7 @@ type questions = {
 const DefaultPDf = ({ props }: any) => {
   const { selected_question, topic, index } = props;
   let count = 1;
-  console.log(selected_question,"d");
+  // console.log(selected_question,"d");
   return (
     <Box>
       <Box

@@ -141,7 +141,7 @@ ModalProps) => {
     handleClose?.();
   };
 
-  // console.log("MODAL", categoryObj, data);
+  console.log("MODAL", categoryObj, data,ts_id);
   return (
     <div>
       <Modal
@@ -205,8 +205,8 @@ ModalProps) => {
                           // defaultOptions
                           options={
                             item.topics
-                              .filter((topic:any) => topic.ts_id === ts_id)
-                              .map((filteredTopic:any) => ({
+                              .filter((topic: any) => topic.ts_id == ts_id)
+                              .map((filteredTopic: any) => ({
                                 value: filteredTopic.id,
                                 label: filteredTopic.t_name,
                               })) || []

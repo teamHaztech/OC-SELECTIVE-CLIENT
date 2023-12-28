@@ -97,7 +97,7 @@ const ViewProductDetail = () => {
       tsc_id,
     }: {
       p_id: number | String;
-      tsc_id: number;
+      tsc_id: number | string;
     }) => {
       // console.log(p_id, tsc_id);
 
@@ -261,6 +261,7 @@ const ViewProductDetail = () => {
           // handleSubmit={handleSubmit}
           // setCsvData={setCsvData}
           // restAddProduct={reset}
+          ts_id={testSeries?.data?.ts_id}
           data={data}
           categoryObj={category}
         />

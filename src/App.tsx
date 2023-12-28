@@ -18,8 +18,8 @@ import { AppContext } from "./Context/AppContext";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 const initialOptions = {
-  clientId:import.meta.env.VITE_PAYPAL_CLIENT_ID,
-  currency: "USD",
+  clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
+  currency: "AUD",
   intent: "capture",
 };
 
@@ -91,7 +91,7 @@ function App() {
         // text="Back to Dashboard"
         // link="/"
       />
-      <PayPalScriptProvider  options={initialOptions}>
+      <PayPalScriptProvider options={initialOptions}>
         <MainCartContext>
           <Routes>
             <Route path="/*" element={<Index />} />

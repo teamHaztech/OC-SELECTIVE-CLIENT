@@ -103,7 +103,7 @@ export default function SolutionsModal({
   // console.log(
   //   index?.find((item: any) => item?.element.includes(indexID + 1))
   // );
-  const index_data:any = index?.find((item: any) =>
+  const index_data: any = index?.find((item: any) =>
     item.element.includes(parseInt(indexID) + 1)
   );
   console.log(index);
@@ -187,9 +187,14 @@ export default function SolutionsModal({
                     {!!qData?.conversation || !!qData?.paragraph ? (
                       <>
                         {qData?.paragraph && (
-                          <ParaText4
-                            text={qData?.paragraph}
-                            css={{ fontWeight: "400", marginBottom: "10px" }}
+                          // <ParaText4
+                          //   text={qData?.paragraph}
+                          //   css={{ fontWeight: "400", marginBottom: "10px" }}
+                          // />
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: qData?.paragraph,
+                            }}
                           />
                         )}
                         {qData?.question_image &&

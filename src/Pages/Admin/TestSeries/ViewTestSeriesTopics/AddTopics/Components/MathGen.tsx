@@ -15,7 +15,7 @@ type mapData = {
   Explanation: string;
   Options: string[];
   Question: string;
-  images?: string[];
+  images: string[];
 };
 
 interface MathProps {
@@ -72,14 +72,18 @@ const MathGen = ({
     queryFn: async () => {
       return await adminTokenAxios.get(`/admin/get-image/${category}`);
     },
-    enabled: !!category,
+    // enabled: !!category,
   });
   let image_data = data?.data.images;
   // console.log(image_data);
-
+  const image_keyword = image_data?.map((item:any)=>{
+  
+        return item.image_name;
+  });
+  // console.log(image_keyword);
   const addTestCTMu = useMutation({
     mutationFn: async (data: object[]) => {
-      console.log(data);
+      // console.log(data);
 
       return await adminTokenAxios.post(`/admin/add-test-series-topics`, {
         tsc_id: category,
@@ -94,7 +98,7 @@ const MathGen = ({
     },
     onSuccess: (res: any) => {
       if (res.status == 200) {
-        console.log(res);
+        // console.log(res);
         handleAlertBoxOpen2();
         // navigate(`/admin/test-series/view-test-series-topics`);
         reset({
@@ -208,7 +212,7 @@ const MathGen = ({
         query = `Generate total ${totalQuestions} unique and exceptionally challenging advanced-level practice questions designed for 25-year-old college students preparing for an aptitude exam on the topic of ${topic} that should be extremely difficult, requiring a high IQ of 140 and above.
 
         Criteria:
-        - Scenario: Each question should intricately incorporate a real-life story or scenario related to the topic, making it profoundly contextually rich and engaging.No limit in how long the question is.
+        - Scenario: Each question should intricately incorporate a real-life story or scenario related to the topic and make use of this  keyword in question ${image_keyword.join(",")} , making it profoundly contextually rich and engaging. No limit in how long the question is.
         - Complexity: Ensure that the questions are not just challenging, but they should demand an exceptional level of critical thinking and intellectual prowess, reflecting the highest standards of advanced-level aptitude exams.
         - Explanation: Furnish a detailed and elaborate explanation for the correct answer to help students comprehend the underlying concepts, encouraging a deep understanding of the subject matter.
         
@@ -239,7 +243,7 @@ const MathGen = ({
         query = `Generate ${totalQuestions} unique and challenging advanced-level practice word questions designed for 25 college year students who are preparing for an aptitude exam on the topic of ${topic}. Each question should be based on real-life scenarios, and no limit in how long the question is. 
         Ensure the following criteria for each question:
 
-        1. Scenario: Incorporate a real-life scenario that relates to the topic and makes the question contextually rich.
+        1. Scenario: Incorporate a real-life scenario that relates to the topic and make use of this keyword in question ${image_keyword.join(",")}.
         2. Clarity: Craft questions that are clear, concise, and easily understandable for 25 college year students.
         3. Diversity: Create a diverse set of questions that cover various aspects of the topic.
         5. Complexity: Ensure that answer choices are complex and require critical thinking.
@@ -288,7 +292,7 @@ const MathGen = ({
         questions = message && JSON.parse(message);
         // throw "error"
       } catch (e) {
-        setErrMessage(`something went wrong`);
+        setErrMessage(`Something went wrong. Please try again`);
         handleAlertBoxOpen();
       }
       // console.log(message);
@@ -298,24 +302,30 @@ const MathGen = ({
           item.Explanation && item.Explanation.replace(/Explanation:/g, "");
         item.Question =
           item.Question && item.Question.replace(/Question:/g, "");
-        let data: string[] = [];
+          const questionData = item.Question.split(" ") ?? [];
+        let data: string[] = questionData;
         item.images = [];
         let count: number = 1;
-        console.log(item.images?.length);
+        console.log(data);
 
         image_data?.forEach(
           (search: { image_name: string; image_url: string }) => {
-            if (item.images?.length === 1) {
+            // console.log(item.images.length);
+            if (item.images.length  === 1) {
               return true; 
             }
+          
             const caps = search.image_name.toUpperCase();
 
             const match = data.find(
-              (word: string) => word.toUpperCase() === caps
+              (word: string) => {
+                console.log(word.toUpperCase() , caps);
+               return word.toUpperCase() === caps
+              }
             );
 
             if (match) {
-              item.images?.push(search.image_url); // Add the image URL to the question
+              item.images.push(search.image_url); // Add the image URL to the question
             }
            
           }
@@ -323,19 +333,19 @@ const MathGen = ({
        // }
         // console.log(male,female);
 
-        if (item.images?.length === 0) {
-          delete item.images;
-        }
+        // if (item.images?.length === 0) {
+        //   delete item.images;
+        // }
 
         responses.push(item); // Add the modified item to the responses array
       });
-      console.log("final", responses);
+      // console.log("final", responses);
       return responses;
     },
 
     onSuccess: (data: any) => {
       setResData(data);
-      console.log("Success Data", data);
+      // console.log("Success Data", data);
     },
     onError: (error) => {
       // console.log(error);

@@ -379,7 +379,7 @@ console.log(Math.round(totalQuestions/csvData.length),csvData.length,totalQuesti
           handleAlertBoxOpen();
         }
         // console.log(message);
-        console.log(questions);
+        // console.log(questions);
         questions?.map((item: mapData, index: any) => {
           // if (category == 3) {
             item.Paragraph = item.Paragraph && item.Paragraph != "undefined"
@@ -396,11 +396,11 @@ console.log(Math.round(totalQuestions/csvData.length),csvData.length,totalQuesti
           item.Question =
             item.Question && item.Question.replace(/Question:/g, "");
           let data: string[] = [];
-          const keysToCheck = ["Paragraph", "Conversation", ""];
-          const itemKeys = Object.keys(item);
-          const exists = keysToCheck.every((key) => {
-            return itemKeys.includes(key);
-          }); 
+          // const keysToCheck = ["Paragraph", "Conversation", ""];
+          // const itemKeys = Object.keys(item);
+          // const exists = keysToCheck.every((key) => {
+          //   return itemKeys.includes(key);
+          // }); 
 
           // if (exists) {
           // if (item.Paragraph || item.Conversation) {
@@ -419,7 +419,7 @@ console.log(Math.round(totalQuestions/csvData.length),csvData.length,totalQuesti
           // else {
           //   data = item.Question.split(" ");
           // }
-          console.log(data);
+          // console.log(data);
 
           item.images = [];
           let count: number = 1;
@@ -428,7 +428,7 @@ console.log(Math.round(totalQuestions/csvData.length),csvData.length,totalQuesti
           // if (item.images?.length !== 2) {
           // if (exists) {
             maleNames.forEach((search: string) => {
-              if (item.images.length <= 2) {
+              if (item.images.length >= 2) {
                 return true; // Exit the loop
               }
               const caps = search.toUpperCase();
@@ -458,7 +458,7 @@ console.log(Math.round(totalQuestions/csvData.length),csvData.length,totalQuesti
               return count == 3;
             });
             femaleNames.forEach((search: string) => {
-              if (item.images.length <= 2) {
+              if (item.images.length >= 2 ) {
                 return true; 
               }
               const caps = search.toUpperCase();
@@ -512,14 +512,14 @@ console.log(Math.round(totalQuestions/csvData.length),csvData.length,totalQuesti
 
           responses.push(item); // Add the modified item to the responses array
         });
-        console.log(responses);
+        // console.log(responses);
       }
       setResData(responses);
       return responses;
     },
     onSuccess: (data: any) => {
      
-      console.log("Success Data", data);
+      // console.log("Success Data", data);
     },
     onError: (error) => {
       // console.log(error);
