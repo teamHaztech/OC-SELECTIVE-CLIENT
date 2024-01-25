@@ -35,10 +35,7 @@ const Register = () => {
     watch,
     formState: { errors },
     reset,
-    
   } = useForm<Inputs>();
-  console.log(errors);
-  
   const RegisterMU = useMutation({
     mutationFn: async (data: Inputs) => {
       return await axiosBaseURL.post("/register", data);
@@ -121,13 +118,7 @@ const Register = () => {
               },
             },
           }}
-          {...register("phone", {
-            required: 'Phone number is required',
-            pattern: {
-              value: /^(\+61|0)[2-9]\d{8}$/,
-              message: 'Invalid Australian phone number',
-            },
-          })}
+         {...register("phone", { maxLength: 10 })}
           InputProps={{
             startAdornment: <InputAdornment position="start">+61</InputAdornment>,
           }}
@@ -136,7 +127,7 @@ const Register = () => {
         
         {errors.phone && (
           <Typography sx={{ mt: 3, p: 0, color: "red" }}>
-         {errors?.phone?.message}
+            *It should contain 10 digits
           </Typography>
         )}
         <Input

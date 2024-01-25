@@ -19,7 +19,6 @@ import { MRT_ColumnDef } from "material-react-table";
 import AdvanceTable from "../../Admin/components/AdvanceTable";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import SolutionsModal from "../../../Components/Model/SolutionsModal";
-import AlertBox from "../../../Components/Common/AlertBox";
 
 interface option {
   name: string;
@@ -118,7 +117,7 @@ const TestRAS = () => {
       },
       {
         accessorKey: "topic",
-        header: "Topic Name",
+        header: "Subject",
         size: 150,
       },
 
@@ -194,9 +193,9 @@ const TestRAS = () => {
     []
   );
 
-  // if (isLoading) {
-  //   return <LoadingBar />;
-  // }
+  if (isLoading) {
+    return <LoadingBar />;
+  }
 
   const props = {
     columns: columns,
@@ -211,10 +210,8 @@ const TestRAS = () => {
     // setSorting: setSorting,
   };
   const indexIDString = indexID?.toString(); 
-  
   return (
     <>
-  
       <Container maxWidth="lg">
         {/* <Card
         sx={{

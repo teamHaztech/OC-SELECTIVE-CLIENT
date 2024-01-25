@@ -145,7 +145,6 @@ const ExamFirstSection = (props: props) => {
   const index_data = index?.find((item: any) =>
     item.element.includes(props.count + 1)
   );
-  let q_data = question?.questions
   return (
     <Card
       sx={{
@@ -156,8 +155,6 @@ const ExamFirstSection = (props: props) => {
         paddingX: "10px",
         maxHeight: "88vh",
       }}
-      className="prevent-select "
-      onSelect={(e)=>e.preventDefault()}
     >
       {props.isLoading ? (
         <LoadingBar />
@@ -180,7 +177,7 @@ const ExamFirstSection = (props: props) => {
             </Box>
             <Stack
               direction="column"
-              spacing={1}
+              spacing={5}
               marginX="auto"
               marginTop={3}
               maxWidth="950px"
@@ -201,7 +198,7 @@ const ExamFirstSection = (props: props) => {
               onCopy={(e) => props.preventCopyPaste(e)}
             >
               <Stack>
-                {/* {props.index && props.index?.length != 0 && (
+                {props.index && props.index?.length != 0 && (
                   <Stack spacing={2} marginBottom={3}>
                     <ParaText4
                       text={`${index_data.start} - ${index_data.end}): For questions ${index_data.start} - ${index_data.end} choose the option (A,B,C or D) which think the best answers the question`}
@@ -212,21 +209,21 @@ const ExamFirstSection = (props: props) => {
                       css={{ fontWeight: "500" }}
                     />
                   </Stack>
-                )} */}
+                )}
 
-                {q_data && (
+                {question && (
                   <>
-                    {!!q_data.conversation ||
-                    !!q_data.paragraph ? (
+                    {!!question?.questions.conversation ||
+                    !!question?.questions.paragraph ? (
                       <>
-                        {q_data.paragraph && (
+                        {question?.questions.paragraph && (
                           <ParaText4
-                            text={q_data.paragraph}
+                            text={question.questions.paragraph}
                             css={{ fontWeight: "400", marginBottom: "10px" }}
                           />
                         )}
-                        {q_data.question_image &&
-                          q_data.question_image.length !== 0 && (
+                        {question?.questions.question_image &&
+                          question?.questions.question_image.length !== 0 && (
                             <ImageList
                               sx={{
                                 width: "100%",
@@ -238,32 +235,32 @@ const ExamFirstSection = (props: props) => {
                                 alignItems: "center",
                                 mb: "1rem",
                               }}
-                              // cols={2}
-                              // gap={7}
+                              cols={3}
+                              gap={7}
                               // rowHeight={164}
                             >
-                              {q_data.question_image.map(
+                              {question?.questions.question_image.map(
                                 (item: image, key: number) => (
                                   <ImageListItem
                                     key={key}
-                                    sx={{ width: "100%" }}
+                                    // sx={{ width: "200px" }}
                                   >
                                     <img
                                       src={
                                         import.meta.env.VITE_IMAGE_URL +
                                         item.image_url
                                       }
-                                      alt=""
-                                      style={{width: "100%" }}
+                                      alt={`Image ${key}`}
+                                      // style={{ maxWidth: "200px" }}
                                     />
                                   </ImageListItem>
                                 )
                               )}
                             </ImageList>
                           )}
-                        {q_data.conversation && (
+                        {question.questions.conversation && (
                           <ConverationComp
-                            text={q_data.conversation}
+                            text={question.questions.conversation}
                           />
 
                           // <ParaText4
@@ -272,38 +269,36 @@ const ExamFirstSection = (props: props) => {
                           // />
                         )}
                         <ParaText4
-                          text={q_data.question}
+                          text={question.questions.question}
                           css={{ fontWeight: "400", marginBottom: "10px" }}
                         />
                       </>
                     ) : (
                       <>
                         <ParaText4
-                          text={q_data.question}
+                          text={question.questions.question}
                           css={{ fontWeight: "400", marginBottom: "10px" }}
                         />
 
-                        {q_data.question_image &&
-                          q_data.question_image.length !== 0 && (
+                        {question?.questions.question_image &&
+                          question?.questions.question_image.length !== 0 && (
                             <ImageList
                               sx={{
                                 width: "100%",
-                                display:"flex",
-                                
                                 // maxHeight: "340px",
                                 maxWidth: "hidden",
                                 flex: "column",
                                 justifyContent: "space-between",
                               }}
-                              // cols={2}
-                              // gap={7}
+                              cols={3}
+                              gap={7}
                               // rowHeight={164}
                             >
-                              {q_data.question_image.map(
+                              {question?.questions.question_image.map(
                                 (item: image, key: number) => (
                                   <ImageListItem
                                     key={key}
-                                    sx={{ maxWidth: "180px" }}
+                                    sx={{ minWidth: "200px" }}
                                   >
                                     <img
                                       src={
@@ -311,13 +306,10 @@ const ExamFirstSection = (props: props) => {
                                         item.image_url
                                       }
                                       style={{
-                                        // maxWidth: "150px",
-                                        // height: "100%",
-                                        // objectFit: "cover",
-                                        backgroundSize:"none"
-                                        // aspectRatio:"1/1"
+                                        // minWidth: "150px",
+                                        objectFit: "cover",
                                       }}
-                                      alt=""
+                                      alt={`Image ${key}`}
                                     />
                                   </ImageListItem>
                                 )
@@ -329,7 +321,7 @@ const ExamFirstSection = (props: props) => {
                   </>
                 )}
               </Stack>
-            <Stack sx={{m:0,mx:1}}>
+              <Stack sx={{mx:8}}>
                 {/* <ParaText4 text="Option" css={{ fontWeight: "600" }} /> */}
                 <form onChange={handleSubmit(onSubmit)}>
                   <Controller
@@ -346,20 +338,20 @@ const ExamFirstSection = (props: props) => {
                             value="A"
                             control={<Radio />}
                             label={`${
-                              q_data?.option_1.endsWith(
+                              question?.questions.option_1.endsWith(
                                 ".png" || ".jpeg" || ".jpg"
                               )
                                 ? ""
-                                : q_data?.option_1
+                                : question?.questions.option_1
                             }`}
                           />
-                          {q_data?.option_1.endsWith(
+                          {question?.questions.option_1.endsWith(
                             ".png" || ".jpeg" || ".jpg"
                           ) && (
                             <img
                               src={
                                 import.meta.env.VITE_IMAGE_URL +
-                                q_data?.option_1
+                                question?.questions.option_1
                               }
                               style={{ maxWidth: "200px" }}
                             />
@@ -374,20 +366,20 @@ const ExamFirstSection = (props: props) => {
                             }
                             control={<Radio />}
                             label={`${
-                              q_data?.option_1.endsWith(
+                              question?.questions.option_1.endsWith(
                                 ".png" || ".jpeg" || ".jpg"
                               )
                                 ? ""
-                                : q_data?.option_2
+                                : question?.questions.option_2
                             }`}
                           />
-                          {q_data?.option_1.endsWith(
+                          {question?.questions.option_1.endsWith(
                             ".png" || ".jpeg" || ".jpg"
                           ) && (
                             <img
                               src={
                                 import.meta.env.VITE_IMAGE_URL +
-                                q_data?.option_2
+                                question?.questions.option_2
                               }
                               style={{ maxWidth: "200px" }}
                             />
@@ -401,20 +393,20 @@ const ExamFirstSection = (props: props) => {
                             }
                             control={<Radio />}
                             label={`${
-                              q_data?.option_1.endsWith(
+                              question?.questions.option_1.endsWith(
                                 ".png" || ".jpeg" || ".jpg"
                               )
                                 ? ""
-                                : q_data?.option_3
+                                : question?.questions.option_3
                             }`}
                           />
-                          {q_data?.option_1.endsWith(
+                          {question?.questions.option_1.endsWith(
                             ".png" || ".jpeg" || ".jpg"
                           ) && (
                             <img
                               src={
                                 import.meta.env.VITE_IMAGE_URL +
-                                q_data?.option_3
+                                question?.questions.option_3
                               }
                               style={{ maxWidth: "200px" }}
                             />
@@ -428,20 +420,20 @@ const ExamFirstSection = (props: props) => {
                             }
                             control={<Radio />}
                             label={`${
-                              q_data?.option_1.endsWith(
+                              question?.questions.option_1.endsWith(
                                 ".png" || ".jpeg" || ".jpg"
                               )
                                 ? ""
-                                : q_data?.option_4
+                                : question?.questions.option_4
                             }`}
                           />
-                          {q_data?.option_1.endsWith(
+                          {question?.questions.option_1.endsWith(
                             ".png" || ".jpeg" || ".jpg"
                           ) && (
                             <img
                               src={
                                 import.meta.env.VITE_IMAGE_URL +
-                                q_data?.option_4
+                                question?.questions.option_4
                               }
                               style={{ maxWidth: "200px" }}
                             />

@@ -17,11 +17,9 @@ const AnimatedText = styled.p`
   /* overflow-y: auto; */
   white-space: nowrap;
 `;
-const NotificationStrip = ({ data }: any) => {
 
-  // console.log(!!data);
-  
-  return !!data && data.length != 0 ? (
+const NotificationStrip = ({ data }: any) => {
+  return (
     <Box
       bgcolor={"#ffbf69"}
       mb={1}
@@ -31,7 +29,7 @@ const NotificationStrip = ({ data }: any) => {
     >
       <Link to="/user/Test-schedule">
         <AnimatedText>
-          {data?.map((item: any) => (
+          {data.map((item: any) => (
             <Typography
               component={"span"}
               key={item.id}
@@ -41,12 +39,12 @@ const NotificationStrip = ({ data }: any) => {
               fontWeight={"bold"}
             >
               Package {item.p_name} is about to expire
-              {item.remaining_days === 0
+              {item.remaining_days == 0
                 ? " Today!! "
-                : item.remaining_days === 1
+                : item.remaining_days == 1
                 ? " in " + item.remaining_days + " day!! "
                 : " in " + item.remaining_days + " days!! "}
-              {item.remaining_days === 0
+              {item.remaining_days == 0
                 ? ""
                 : "Take Exam before " + item.valid_till + " !!"}
             </Typography>
@@ -54,7 +52,7 @@ const NotificationStrip = ({ data }: any) => {
         </AnimatedText>
       </Link>
     </Box>
-  ) : null;
+  );
 };
 
 export default NotificationStrip;

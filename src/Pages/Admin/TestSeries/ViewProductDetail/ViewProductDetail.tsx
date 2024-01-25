@@ -14,7 +14,6 @@ import { UserContext } from "../../../../Context/UserContext";
 import LoadingBar from "../../../../Components/Headers/LoadingBar";
 import AddTestSetModal from "../../../../Components/Model/AddTestSetModal";
 import EditTestSetModal from "../../../../Components/Model/EditTestSetModal";
-import EditProduct from "../../../../Components/Model/EditProduct";
 
 const ViewProductDetail = () => {
   const queryClient = useQueryClient();
@@ -49,7 +48,7 @@ const ViewProductDetail = () => {
           `admin/show-product-details/${productdetails}`
         );
 
-        // console.log("Products Details", response.data?.product_detail);
+        console.log("Products Details", response.data?.product_detail);
 
         return response?.data?.product_detail;
       } catch (error) {
@@ -62,7 +61,7 @@ const ViewProductDetail = () => {
     "ViewProductDetails1",
     productdetails,
   ]);
-  // console.log(updatedData,productdetails);
+  // console.log(updatedData);
 
   const deleteSetMU = useMutation({
     mutationFn: async (id: number) => {
@@ -262,14 +261,11 @@ const ViewProductDetail = () => {
           // handleSubmit={handleSubmit}
           // setCsvData={setCsvData}
           // restAddProduct={reset}
-          ts_id={testSeries?.data?.ts_id}
           data={data}
           categoryObj={category}
         />
       )}
-      <EditProduct />
     </>
-    
   );
 };
 

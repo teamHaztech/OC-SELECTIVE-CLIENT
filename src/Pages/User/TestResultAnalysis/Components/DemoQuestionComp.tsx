@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Typography,
   Radio,
@@ -16,12 +16,7 @@ import styled from "@emotion/styled";
 import { Controller, useForm } from "react-hook-form";
 import { BButton, BButton2 } from "../../../../Components/Common/Button";
 import PdfMaker from "../../../Admin/TestSeries/Components/PdfMaker";
-import PaymentModal2 from "../../../../Components/Model/PaymentModal2";
-import AlertBox from "../../../../Components/Common/AlertBox";
-import DownloadPDF from "../../../Admin/TestSeries/Components/PDF/DownloadPDF";
-import { TempContext } from "../../../../Context/TempContext";
 
-// import PaymentModal2 from "../../../Components/Model/PaymentModal2";
 const StyledRoot = styled.div`
   text-align: center;
   max-width: 100%;
@@ -86,58 +81,47 @@ const StyledButton = styled(Button)`
 type FormValues = {
   total_questions: number;
 };
-const DemoQuestionComp = ({
-  questions,
-  total_questions,
-  handleClose,
-  tsc_id,
-  tst_id,
-}: any) => {
+const DemoQuestionComp = ({ questions, total_questions }: any) => {
+  const [setData, setSetData] = useState<any>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [amount, setAmount] = useState(0);
+  const [selectedOption, setSelectedOption] = useState("");
   const [userAnswers, setUserAnswers] = useState(
     Array(questions.length).fill("")
   );
   const [showResults, setShowResults] = useState(false);
-  const { showPDF, setShowPDF, setSuccess,setPayment_id,payment_id } = useContext(TempContext);
   const { register, control, watch, reset } = useForm<FormValues>();
   const handleAnswerChange = (e: any) => {
     const updatedUserAnswers = [...userAnswers];
     updatedUserAnswers[currentQuestionIndex] = e.target.value;
     setUserAnswers(updatedUserAnswers);
   };
-  // const [open, setOpen] = useState<boolean>(false);
-  // const handleAlertBoxOpen = () => {
-  //   setOpen(true);
-  // };
-  const [paymentOpen, setPaymentOpen] = useState<boolean>(false);
-  useEffect(() => {
-   
-   
-    let amount = 0;
-    switch (watch("total_questions")) {
-      case 10:
-        amount = 5;
-        break;
 
-      case 25:
-        amount = 15;
-        break;
-      case 35:
-        amount = 20;
-        break;
-    }
-    setAmount(amount);
-  }, [watch("total_questions")]);
-  // const handleAlertBoxClose = () => {
-  //   setOpen(false);
-  // };
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setShowResults(true);
     }
+  };
+
+  const handleSelectChange = (event: any) => {
+    setSelectedOption(event.target.value as string);
+  };
+
+  const calculateScore = () => {
+    let score = 0;
+    for (let i = 0; i < questions.length; i++) {
+      if (userAnswers[i].toUpperCase() === questions[i].correct_option) {
+        score++;
+      }
+    }
+    return score;
+  };
+
+  const restartQuiz = () => {
+    setCurrentQuestionIndex(0);
+    setUserAnswers(Array(questions.length).fill(""));
+    setShowResults(false);
   };
 
   const splitConversation = (conversation: any) => {
@@ -158,161 +142,121 @@ const DemoQuestionComp = ({
     });
     return styledLines;
   };
-  
-  let q_data = total_questions?.total_questions;
-  // console.log(q_data );
-  return (
-    <>
-      <StyledRoot>
-        {showResults ? (
-         ( showPDF && payment_id.includes(tst_id))? (
-            <DownloadPDF
-              bol={false}
-              data={q_data}
-              randomG={true}
-              total={watch("total_questions")}
-              topic={total_questions?.topic}
-              set={false}
-              // index={set?.index}
-              cateId={tsc_id} //need to set this properly
-            />
-          ) : (
-            // <PdfMaker
-            //   bol={!!total_questions}
-            //   data={total_questions?.total_questions}
-            //   //   randomG={true}
-            //   button={
-            //     <BButton type="button" name="Download" css={{ width: "340" }} />
-            //   }
-            //   total={watch("total_questions")}
-            //   topic={total_questions?.topic}
-            // />
-            <div>
-              {/* <Typography variant="h5">Quiz Results</Typography>
-              <Typography variant="body1">
-                Your Score: {calculateScore()} out of {questions.length}
-              </Typography> */}
-              <StyledStack flexDirection={"column"} padding={10} spacing={2}>
-                <Stack spacing={1} width={340}>
-                  <FormLabel
-                    sx={{ fontWeight: "900", fontSize: "1.1rem" }}
-                    id="demo-controlled-open-select-label"
-                  >
-                    Total Questions
-                  </FormLabel>
 
-                  <Controller
-                    name="total_questions"
-                    control={control}
-                    defaultValue={0} // Set a default value here
-                    render={({ field }) => (
-                      <FormControl fullWidth>
-                        <Select {...field} placeholder="Enter Total Questions">
-                          <MenuItem value={0} disabled>
-                            <em>None</em>
-                          </MenuItem>
-                          {/* <MenuItem value={5}>5</MenuItem> */}
-                          <MenuItem value={10} disabled={q_data?.length < 10}>
-                            10 - $5
-                          </MenuItem>
-                          <MenuItem value={25} disabled={q_data?.length < 25}>
-                            25 - $15
-                          </MenuItem>
-                          <MenuItem value={35} disabled={q_data?.length < 35}>
-                            35 - $20
-                          </MenuItem>
-                        </Select>
-                      </FormControl>
-                    )}
-                  />
-                </Stack>
-                {watch("total_questions") && amount ? (
-                  <>
-                    <PaymentModal2
-                      amount={amount}
-                      open={paymentOpen}
-                      handleClose={()=>setPaymentOpen(false)}
-                      tst_id={tst_id}
-                    />
-                    <BButton
-                      type="button"
-                      name="Buy"
-                      css={{ width: "340px" }}
-                      func={()=>setPaymentOpen(true)}
-                    />
-                  </>
-                ) : (
-                  // <PdfMaker
-                  //   bol={!!total_questions}
-                  //   data={total_questions?.total_questions}
-                  //   //   randomG={true}
-                  //   button={
-                  //     <BButton
-                  //       type="button"
-                  //       name="Download"
-                  //       css={{ width: "340" }}
-                  //     />
-                  //   }
-                  //   total={watch("total_questions")}
-                  //   topic={total_questions?.topic}
-                  // />
-                  <BButton type="button" name="Buy" css={{ width: "340px" }} />
+  return (
+    <StyledRoot>
+      {showResults ? (
+        <div>
+          {/* <Typography variant="h5">Quiz Results</Typography>
+          <Typography variant="body1">
+            Your Score: {calculateScore()} out of {questions.length}
+          </Typography> */}
+          <StyledStack flexDirection={"column"} padding={10} spacing={2}>
+            <Stack spacing={1} width={340}>
+              <FormLabel
+                sx={{ fontWeight: "900", fontSize: "1.1rem" }}
+                id="demo-controlled-open-select-label"
+              >
+                Total Questions
+              </FormLabel>
+
+              <Controller
+                name="total_questions"
+                control={control}
+                defaultValue={0} // Set a default value here
+                render={({ field }) => (
+                  <FormControl fullWidth>
+                    <Select
+                      {...field}
+                      placeholder="Enter Total Questions"
+                      // sx={{ width: "50%" }}
+                    >
+                      <MenuItem value={0} disabled>
+                        <em>None</em>
+                      </MenuItem>
+                      {/* <MenuItem value={5}>5</MenuItem> */}
+                      <MenuItem value={15}>15</MenuItem>
+                      <MenuItem value={20}>20</MenuItem>
+                      <MenuItem value={25}>25</MenuItem>
+                      <MenuItem value={30}>30</MenuItem>
+                      <MenuItem value={50}>50</MenuItem>
+                    </Select>
+                  </FormControl>
                 )}
-              </StyledStack>
-            </div>
-          )
-        ) : (
-          <div>
-            <StyledParagraph>
-              {questions[currentQuestionIndex].paragraph}
-            </StyledParagraph>
-            <StyledConversation>
-              {splitConversation(questions[currentQuestionIndex].conversation)}
-            </StyledConversation>
-            <StyledQuestion variant="h6">
-              Question {currentQuestionIndex + 1}:{" "}
-              {questions[currentQuestionIndex].question}
-            </StyledQuestion>
-            <StyledOptions>
-              {["1", "2", "3", "4"].map((option) => (
-                <div key={option}>
-                  <Radio
-                    name="answer"
-                    value={option}
-                    checked={userAnswers[currentQuestionIndex] === option}
-                    onChange={handleAnswerChange}
+              />
+            </Stack>
+
+            {total_questions && watch("total_questions") ? (
+              <PdfMaker
+                bol={!!total_questions}
+                data={total_questions?.total_questions}
+                //   randomG={true}
+                button={
+                  <BButton
+                    type="button"
+                    name="Download"
+                    css={{ width: "340" }}
                   />
-                  {questions[currentQuestionIndex][
+                }
+                total={watch("total_questions")}
+                topic={total_questions?.topic}
+              />
+            ) : (
+              <BButton type="button" name="Download" css={{ width: "340px" }} />
+            )}
+          </StyledStack>
+        </div>
+      ) : (
+        <div>
+          <StyledParagraph>
+            {questions[currentQuestionIndex].paragraph}
+          </StyledParagraph>
+          <StyledConversation>
+            {splitConversation(questions[currentQuestionIndex].conversation)}
+          </StyledConversation>
+          <StyledQuestion variant="h6">
+            Question {currentQuestionIndex + 1}:{" "}
+            {questions[currentQuestionIndex].question}
+          </StyledQuestion>
+          <StyledOptions>
+            {["1", "2", "3", "4"].map((option) => (
+              <div key={option}>
+                <Radio
+                  name="answer"
+                  value={option}
+                  checked={userAnswers[currentQuestionIndex] === option}
+                  onChange={handleAnswerChange}
+                />
+                {questions[currentQuestionIndex][
+                  "option_" + option.toLowerCase()
+                ].endsWith(".png" || ".jpeg" || ".jpg") ? (
+                  <img
+                    src={
+                      import.meta.env.VITE_IMAGE_URL +
+                      questions[currentQuestionIndex][
+                        "option_" + option.toLowerCase()
+                      ]
+                    }
+                    alt="Image"
+                  />
+                ) : (
+                  questions[currentQuestionIndex][
                     "option_" + option.toLowerCase()
-                  ].endsWith(".png" || ".jpeg" || ".jpg") ? (
-                    <img
-                      src={
-                        import.meta.env.VITE_IMAGE_URL +
-                        questions[currentQuestionIndex][
-                          "option_" + option.toLowerCase()
-                        ]
-                      }
-                      alt=""
-                    />
-                  ) : (
-                    questions[currentQuestionIndex][
-                      "option_" + option.toLowerCase()
-                    ]
-                  )}
-                </div>
-              ))}
-            </StyledOptions>
-            <StyledButton
-              variant="contained"
-              color="primary"
-              onClick={handleNextQuestion}
-            >
-              Next
-            </StyledButton>
-          </div>
-        )}
-      </StyledRoot>
-    </>
+                  ]
+                )}
+              </div>
+            ))}
+          </StyledOptions>
+          <StyledButton
+            variant="contained"
+            color="primary"
+            onClick={handleNextQuestion}
+          >
+            Next
+          </StyledButton>
+        </div>
+      )}
+    </StyledRoot>
   );
 };
 

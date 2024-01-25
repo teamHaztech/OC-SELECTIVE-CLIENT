@@ -22,9 +22,7 @@ interface ContextValue {
   removeFromCart: (id: number) => void;
   addToCartFL: (id: number) => void;
   CRLoading: boolean;
-  cartUpdate: () => void;
-  purchases:number[];
-  addLoading:boolean;
+  cartUpdate:()=>void;
 }
 
 const defaultValue: ContextValue = {
@@ -37,9 +35,7 @@ const defaultValue: ContextValue = {
   removeFromCart: (id: number) => {},
   addToCartFL: (id: number) => {},
   CRLoading: false,
-  cartUpdate: () => {},
-  purchases:[],
-  addLoading:false
+  cartUpdate:()=>{}
 };
 
 const Context = createContext<ContextValue>(defaultValue);
@@ -78,7 +74,7 @@ const MainCartContext: React.FC<MainContextProps> = ({ children }) => {
     },
     onSuccess: (res) => {},
   });
-const addLoading = CartData.isLoading;
+
   const CartRemove = useMutation({
     mutationFn: async (id: number) => {
       return await tokenAxios.get(`/remove-from-cart/${id}`);
@@ -95,13 +91,11 @@ const addLoading = CartData.isLoading;
     }
   );
 
-  // useEffect(() => {
-  //   cartUpdate();
-  // }, [data]);
+  useEffect(() => {
+    cartUpdate();
+  }, [ data ]);
 
   const cartUpdate = () => {
-    
-    
     if (user) {
       let updatedCart = data?.data.cart_data?.map((item: any) => {
         return item.tsp_id;
@@ -115,22 +109,21 @@ const addLoading = CartData.isLoading;
   const CRLoading = CartRemove.isLoading;
 
   const addToCart = (id: number) => {
+    const updatedCart: number[] = cart ? [...cart, id] : [id];
+
     if (user && purchases?.includes(id)) {
       handlePUSuccessOpen();
       return 0;
     }
-    const updatedCart: number[] = cart ? [...cart, id] : [id];
+
     setCart(updatedCart);
 
     if (user) {
-      // console.log("Add to cart ",user.id,id);
-      
       CartData.mutate({
         u_id: user.id,
         p_id: id,
       });
     }
-    // localStorage.removeItem("product_id");
     localStorage.setItem("product_id", JSON.stringify(updatedCart));
     return 1;
   };
@@ -145,27 +138,25 @@ const addLoading = CartData.isLoading;
     // localStorage.removeItem("product_id");
   };
 
-  const removeFromCart = async (id: number) => {
-    // localStorage.removeItem("product_id");
-    if (user) {
-      CartRemove.mutate(id);
-    }
+  const removeFromCart = (id: number) => {
     let temp = cart.filter((item: number) => {
       if (item != id) {
         return item;
       }
     });
 
-    console.log(cart);
-   
-    localStorage.setItem("product_id", JSON.stringify(temp));
     setCart(temp);
+    console.log(cart);
+    localStorage.setItem("product_id", JSON.stringify(temp));
+
+    if (user) {
+      CartRemove.mutate(id);
+    }
   };
 
   return (
     <Context.Provider
       value={{
-        purchases,
         cartUpdate,
         RAllFromCart,
         CRLoading,
@@ -176,7 +167,6 @@ const addLoading = CartData.isLoading;
         setCart,
         removeFromCart,
         addToCartFL,
-        addLoading
       }}
     >
       {children}

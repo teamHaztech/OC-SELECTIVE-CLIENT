@@ -186,10 +186,10 @@ const ReadingTestSection = (props: props) => {
               spacing={5}
               marginX="auto"
               marginTop={3}
-              width="100%"
+              maxWidth="950px"
               maxHeight="550px"
               paddingBottom={2}
-              paddingX={1}
+              paddingX={5}
               sx={{
                 overflow: "auto",
                 "&::-webkit-scrollbar": {
@@ -224,12 +224,12 @@ const ReadingTestSection = (props: props) => {
                 }}
               >
                 {props.index && props.index?.length != 0 && (
-                  <Stack spacing={2} marginBottom={3} width="100%">
+                  <Stack spacing={2} marginBottom={3}>
                     {/* <ParaText4
                       text={`${index_data.start} - ${index_data.end}): For questions ${index_data.start} - ${index_data.end} choose the option (A,B,C or D) which think the best answers the question`}
                       css={{ fontWeight: "500" }}
                     /> */}
-                    {/* <ParaText4
+                    <ParaText4
                       text={
                         <span>
                           For questions
@@ -240,11 +240,11 @@ const ReadingTestSection = (props: props) => {
                           think the best answers the question
                         </span>
                       }
-                    /> */}
-                    {/* <ParaText3
+                    />
+                    <ParaText3
                       text={`Read the extracts below then answer the question`}
                       css={{ fontWeight: "500" }}
-                    /> */}
+                    />
                     {/* <Typography
                       textAlign={"center"}
                       fontSize={"30px"}
@@ -307,23 +307,7 @@ const ReadingTestSection = (props: props) => {
              
                 {/* <ParaText4 text="Option" css={{ fontWeight: "600" }} /> */}
               </Stack>
-              <Stack
-                width="60%"
-                sx={{
-                  overflow: "auto",
-                  "&::-webkit-scrollbar": {
-                    width: 2,
-                  },
-                  "&::-webkit-scrollbar-track": {
-                    backgroundColor: "white",
-                  },
-                  "&::-webkit-scrollbar-thumb": {
-                    backgroundColor: "gray",
-                    borderRadius: 2,
-                  },
-                }}
-                onCopy={(e) => props.preventCopyPaste(e)}
-              >
+              <Stack>
                 <ParaText4
                   text={question?.questions.question}
                   css={{

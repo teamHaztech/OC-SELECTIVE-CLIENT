@@ -64,7 +64,7 @@ const Checkout = ({
           {
             description: "Payment for package",
             amount: {
-              currency_code: "AUD",
+              currency_code: "USD",
               value: amount,
             },
           },

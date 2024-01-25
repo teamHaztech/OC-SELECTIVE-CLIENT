@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import LoadingBar from "../../../Components/Headers/LoadingBar";
 import { useTimer } from "react-timer-hook";
 import ReadingTestSection from "./Components/ReadingTestSection";
-import AlertBox from "../../../Components/Common/AlertBox";
 
 type mutateType = {
   id: number;
@@ -55,7 +54,28 @@ type questionType = {
   };
 };
 const Exam_Section = () => {
-  
+  // document.addEventListener('contextmenu', (e:any) => e.preventDefault());
+
+  // function ctrlShiftKey(e:any, keyCode:any) {
+  //   return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+  // }
+
+  // document.onkeydown = (e:any) => {
+  //   if (
+
+  //     ctrlShiftKey(e, 'I') ||
+  //     ctrlShiftKey(e, 'J') ||
+  //     ctrlShiftKey(e, 'C') ||
+  //     (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))
+  //   )
+  //     return false;
+  // };
+
+  const preventCopyPaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    alert("Copying and pasting is not allowed!");
+  };
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const params = useParams();
@@ -64,49 +84,6 @@ const Exam_Section = () => {
   const [question, setQuestion] = useState<questionType | null>(null);
   const [questions, setQuestions] = useState<questionType[] | []>([]);
   const [count, setCount] = useState<number>(0);
-  const [open, setOpen] = useState<boolean>(false);
-  const handleAlertBoxClose = () => {
-    setOpen(false);
-  };
-  document.addEventListener("keyup", (e) => {
-    if (e.key === "PrintScreen") {
-      console.log(e.key);
-      
-      e.preventDefault();
-      setOpen(true);
-      return false;
-    }
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.key == "p") {
-      setOpen(true);
-      // e.cancelBubble = true;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      return false;
-    }
-  });
-  document.addEventListener("contextmenu", (e: any) => e.preventDefault());
-
-  function ctrlShiftKey(e: any, keyCode: any) {
-    return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
-  }
-
-  document.onkeydown = (e: any) => {
-    if (
-      ctrlShiftKey(e, "I") ||
-      ctrlShiftKey(e, "J") ||
-      ctrlShiftKey(e, "C") ||
-      (e.ctrlKey && e.keyCode === "U".charCodeAt(0))
-    )
-      return false;
-  };
-
-  const preventCopyPaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setOpen(true);
-  };
 
   const updateTStatus = useMutation({
     mutationFn: async (data: mutateType) => {
@@ -196,7 +173,7 @@ const Exam_Section = () => {
       restart(time);
       setTimer(false);
     }
- 
+
     setQuestions(data?.data.test_data);
     // console.log(!question);
 
@@ -222,12 +199,9 @@ const Exam_Section = () => {
     });
   };
 
-  // useEffect(() => {
-  //   if(){
-
-  //   }
-  //   submitTimer(false);
-  // }, [minutes]);
+  useEffect(() => {
+    submitTimer(false);
+  }, [minutes]);
 
   const submitTimer = (nav: boolean) => {
     question &&
@@ -280,109 +254,100 @@ const Exam_Section = () => {
     if (count + 1 < questions.length)
       questions && paginate(questions[count + 1]?.id, count + 1);
   };
-  console.log(data?.data?.category_id);
-
+  console.log(data?.data?.category_id );
+  
   if (isLoading) {
     return <LoadingBar />;
   }
-  
   return (
-    <>
-      <AlertBox
-        name={`Not Allowed`}
-        type="error"
-        bol={open}
-        handleAlertBoxClose={handleAlertBoxClose}
-      />
-      <Container maxWidth="xl" sx={{ height: "50px" }}>
-        <Stack direction={"column"}>
-          <Stack
-            sx={{ width: "100%", my: 1 }}
-            direction={{ lg: "row", md: "row", sm: "row", xs: "column" }}
-          >
-            {/* <Header1 header="Section" /> */}
-            <ParaText3
-              text={`Time Remaining: ${minutes}:${seconds}`}
-              css={{ margin: "auto" }}
-            />
-            <Stack
-              direction={{ lg: "row", md: "row", sm: "row", xs: "column" }}
-              spacing={2}
-            >
-              <Button
-                variant="outlined"
-                sx={{
-                  width: "30px",
-                  height: "30px",
-                  color: "#FA8128",
-                  border: "1px solid #FA8128",
-                  backgroundColor: "#FFFFFF",
-                  marginY: "auto",
-                }}
-              >
-                <Person2OutlinedIcon sx={{ width: "30px", height: "30px" }} />
-              </Button>
-              <Box>
-                {user && (
-                  <ParaText3 text={user?.name} css={{ fontWeight: "500" }} />
-                )}
-              </Box>
-            </Stack>
-          </Stack>
+    <Container maxWidth="xl" sx={{ height: "50px" }}>
+      <Stack direction={"column"}>
+        <Stack
+          sx={{ width: "100%", my: 1 }}
+          direction={{ lg: "row", md: "row", sm: "row", xs: "column" }}
+        >
+          {/* <Header1 header="Section" /> */}
+          <ParaText3
+            text={`Time Remaining: ${minutes}:${seconds}`}
+            css={{ margin: "auto" }}
+          />
           <Stack
             direction={{ lg: "row", md: "row", sm: "row", xs: "column" }}
             spacing={2}
-            sx={{ width: "100%", my: "15px" }}
           >
-            {data?.data?.category_id === 2 ? (
-              <ReadingTestSection
-                data={question}
-                count={count}
-                mutation={updateAStatus}
-                isLoading={isLoading}
-                index={data?.data.index}
-                preventCopyPaste={preventCopyPaste}
-              />
-            ) : (
-              <ExamFirstSection
-                data={question}
-                count={count}
-                mutation={updateAStatus}
-                isLoading={isLoading}
-                index={[]}
-                preventCopyPaste={preventCopyPaste}
-              />
-            )}
-
-            <ExamSecondSection
-              questions={questions}
-              func={paginate}
-              submit={SubmitTestData}
-            />
-          </Stack>
-          <Stack direction="row" spacing={2} marginTop={2}>
-            <OButton
-              name="MARKED FOR REVIEW"
-              css={{ width: "220px" }}
-              func={MarkForReview}
-            />
-            <OButton
-              name="CLEAR RESPONSE"
-              css={{ width: "220px" }}
-              func={ClearResponse}
-            />
-
-            <OButton
-              name="SAVE & CONTINUE LATER"
-              css={{ width: "300px" }}
-              func={() => submitTimer(true)}
-            />
-
-            <WButton name="SAVE & NEXT" func={SaveNext} />
+            <Button
+              variant="outlined"
+              sx={{
+                width: "30px",
+                height: "30px",
+                color: "#FA8128",
+                border: "1px solid #FA8128",
+                backgroundColor: "#FFFFFF",
+                marginY: "auto",
+              }}
+            >
+              <Person2OutlinedIcon sx={{ width: "30px", height: "30px" }} />
+            </Button>
+            <Box>
+              {user && (
+                <ParaText3 text={user?.name} css={{ fontWeight: "500" }} />
+              )}
+            </Box>
           </Stack>
         </Stack>
-      </Container>
-    </>
+        <Stack
+          direction={{ lg: "row", md: "row", sm: "row", xs: "column" }}
+          spacing={2}
+          sx={{ width: "100%", my: "15px" }}
+        >
+          {data?.data?.category_id === 2 ? (
+            <ReadingTestSection
+              data={question}
+              count={count}
+              mutation={updateAStatus}
+              isLoading={isLoading}
+              index={data?.data.index }
+              preventCopyPaste={preventCopyPaste}
+            />
+          ) : (
+            <ExamFirstSection
+              data={question}
+              count={count}
+              mutation={updateAStatus}
+              isLoading={isLoading}
+              index={[]}
+              preventCopyPaste={preventCopyPaste}
+            />
+          )}
+
+          <ExamSecondSection
+            questions={questions}
+            func={paginate}
+            submit={SubmitTestData}
+          />
+        </Stack>
+        <Stack direction="row" spacing={2} marginTop={2}>
+          <OButton
+            name="MARKED FOR REVIEW"
+            css={{ width: "220px" }}
+            func={MarkForReview}
+          />
+          <OButton
+            name="CLEAR RESPONSE"
+            css={{ width: "220px" }}
+            func={ClearResponse}
+          />
+
+          <OButton
+            name="SAVE & CONTINUE LATER"
+            css={{ width: "300px" }}
+            func={() => submitTimer(true)}
+          />
+
+          <WButton name="SAVE & NEXT" func={SaveNext} />
+        </Stack>
+      </Stack>
+    </Container>
   );
 };
 

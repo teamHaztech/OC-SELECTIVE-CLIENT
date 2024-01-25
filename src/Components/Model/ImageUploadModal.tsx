@@ -124,17 +124,12 @@ const ImageUploadModal = ({ open, handleClose, subject }: ModalProps) => {
     //   method: 'POST',
     //   body: formData,
     // }).then((res) => console.log(res));
-    if(data.images.length>20){
-      handleAlertBoxOpen2();
-    }else{
-      // console.log(" DATA", data.images.length);
-      // console.log("image upload D", newData);
-      uploadImagesMutation.mutateAsync(data);
-      setMultipleImages([]);
-    }
     const newData = Object.values(data.images);
     // console.log("image upload F", formData);
-   
+    console.log(" DATA", data);
+    // console.log("image upload D", newData);
+    uploadImagesMutation.mutateAsync(data);
+    setMultipleImages([]); // You'll get an array of File objects here
   };
 
   return (
@@ -147,7 +142,7 @@ const ImageUploadModal = ({ open, handleClose, subject }: ModalProps) => {
       />
 
       <AlertBox
-        name="Please try again "
+        name="Please try again"
         type="error"
         bol={open2}
         handleAlertBoxClose={handleAlertBoxClose2}
@@ -205,20 +200,19 @@ const ImageUploadModal = ({ open, handleClose, subject }: ModalProps) => {
                         >
                           {subject.map((item: any) => {
                             console.log(item.id);
-
-                            if (item.id != 2) {
-                              return (
-                                <FormControlLabel
-                                  // onClick={(e: any) =>
-                                  //   mutation.mutate(e.target.value)
-                                  // }
-                                  key={item.tsc_type}
-                                  value={item.id}
-                                  control={<Radio />}
-                                  label={item.tsc_type}
-                                />
-                              );
+                            
+                            if(item.id != 2){
+                              return (<FormControlLabel
+                                // onClick={(e: any) =>
+                                //   mutation.mutate(e.target.value)
+                                // }
+                                key={item.tsc_type}
+                                value={item.id}
+                                control={<Radio />}
+                                label={item.tsc_type}
+                              />)
                             }
+                          
                           })}
                         </RadioGroup>
                       )}
@@ -239,9 +233,6 @@ const ImageUploadModal = ({ open, handleClose, subject }: ModalProps) => {
               />
             )}
           /> */}
-                  <Typography color={"red"} >
-                    *Maximum 10 Images can be uploaded
-                  </Typography>
                   <input
                     type="file"
                     multiple
@@ -250,12 +241,7 @@ const ImageUploadModal = ({ open, handleClose, subject }: ModalProps) => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={uploadImagesMutation.isLoading}
-                  >
+                  <Button type="submit" variant="contained" color="primary">
                     Upload Images
                   </Button>
                 </Grid>

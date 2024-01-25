@@ -16,7 +16,7 @@ import MenuModel from "../Model/MenuModel";
 import { UserContext } from "../../Context/UserContext";
 import img from "../../Assets/images/logo/logo2.png";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
+
 type userData = {
   id: number;
   name: string;
@@ -55,7 +55,6 @@ const pages: Type[] = [
     icon: <EventRepeatOutlinedIcon sx={pCss} />,
   },
   { name: "Logout", url: "/user", icon: <ExitToAppOutlinedIcon sx={pCss} /> },
-  { name: "FeedBack", url: "/user/FeedBack-Form", icon: <FeedbackOutlinedIcon sx={pCss} /> },
 ];
 
 const UserNavbar = () => {

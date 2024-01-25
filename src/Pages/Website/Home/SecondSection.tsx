@@ -48,7 +48,7 @@ const SecondSection = () => {
         id="product"
       >
         <Box style={{ display: "flex", alignItems: "left", width: "100%" }}>
-          <Header1 header="Buy Online Tests" css={{ mr: "10px" }} />
+          <Header1 header="Buy Test Series" css={{ mr: "10px" }} />
          {ts_data &&  <SelectBox
             defaultValue={String(ts_data?.data.ts[selectVal - 1].id)}
             name="choose test type"

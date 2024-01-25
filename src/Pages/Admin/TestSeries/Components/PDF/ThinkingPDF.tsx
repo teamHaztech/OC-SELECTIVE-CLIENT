@@ -26,7 +26,6 @@ const styles = {
     padding: 2,
     paddingLeft: 20,
     paddingRight: 20,
-    width:"100%"
     // border: "1pt solid #000",
   },
   question: {
@@ -82,9 +81,8 @@ const styles = {
     textAlign: "center" as const,
   },
   image: {
-    width: "200px",
-    height: "150px",
-    
+    maxWidth: "150px",
+    height: "110px",
   },
   optionImage: {
     width: "100px",
@@ -129,8 +127,8 @@ type questions = {
 const ThinkingPDF = ({ props }: any) => {
   const { selected_question, topic, index } = props;
   let count = 1;
-  // console.log(selected_question, "s");
-
+  console.log(selected_question,"s");
+  
   return (
     <Box>
       <Box style={styles.page} sx={{ breakAfter: "page" }}>
@@ -156,67 +154,11 @@ const ThinkingPDF = ({ props }: any) => {
                           <Typography sx={styles.mainText} className="">{`${
                             key + 1
                           }: `}</Typography>
-                          <Typography>{`${item.Paragraph}`}</Typography>
+                          <Typography>{` ${item.Paragraph}`}</Typography>
                         </Stack>
                       )}
-                      {item?.Paragraph && item?.images && (
-                        <Stack
-                          flexDirection={"row"}
-                          justifyContent={"space-between"}
-                          width={"100%"}
-                          marginRight={"auto"}
-                          my={2}
-                        >
-                          {item?.images?.map(
-                            (item2: any, key: number) => {
-                              return (
-                                <img
-                                  key={key}
-                                  style={styles.image}
-                                  src={
-                                    import.meta.env.VITE_IMAGE_URL +
-                                    item2
-                                  }
-                                  alt=""
-                                />
-                              );
-                            }
-                          )}
-                        </Stack>
-                      )}
-                      {item?.Conversation &&
-                        (item?.Conversation && !item?.Paragraph ? (
-                          // <Typography sx={{ my: "10px" }}>
-                          //   {`${item.Conversation}`}
-                          // </Typography>
-                          <Stack flexDirection={"row"} columnGap={1}>
-                            <Typography sx={styles.mainText} className="">{`${
-                              key + 1
-                            }: `}</Typography>
-                            <Typography>{`${item.Conversation}`}</Typography>
-                          </Stack>
-                        ) : (
-                          <Typography sx={{ my: "10px" }}>
-                            {`${item.Conversation}`}
-                          </Typography>
-                        ))}
-                      {item.Conversation || item.Paragraph ? (
-                        <Typography
-                          sx={{ mt: "10px", mb: "20px", fontSize: "16px" }}
-                        >{`${item.Question}`}</Typography>
-                      ) : (
-                        <Stack flexDirection={"row"} columnGap={1}>
-                          <Typography sx={styles.mainText} className="">{`${
-                            key + 1
-                          }: `}</Typography>
-                          <Typography>{`${item.Question}`}</Typography>
-                        </Stack>
-                      )}
-                      {/* {!item.paragraph && item?.question_image && (
-                        <Stack
-                          flexDirection={"row"}
-                          justifyContent={"space-between"}
-                        >
+                      {item?.Paragraph && item?.question_image && (
+                        <div>
                           {item?.question_image?.map(
                             (item2: any, key: number) => {
                               return (
@@ -231,35 +173,58 @@ const ThinkingPDF = ({ props }: any) => {
                               );
                             }
                           )}
+                        </div>
+                      )}
+                      {item?.Conversation && (
+                        <Typography sx={{ my: "10px" }}>
+                          {`${item.Conversation}`}
+                        </Typography>
+                      )}
+                      {item.Conversation || item.Paragraph ? (
+                        <Typography
+                          sx={{ mt: "10px", mb: "20px", fontSize: "16px" }}
+                        >{`${item.Question}`}</Typography>
+                      ) : (
+                        <Stack flexDirection={"row"} columnGap={1}>
+                          <Typography sx={styles.mainText} className="">{`${
+                            key + 1
+                          }: `}</Typography>
+                          <Typography>{` ${item.Question}`}</Typography>
                         </Stack>
-                      )} */}
+                      )}
+                      {!item.paragraph && item?.question_image && (
+                        <div>
+                          {item?.question_image?.map(
+                            (item2: any, key: number) => {
+                              return (
+                                <img
+                                  key={key}
+                                  style={styles.image}
+                                  src={
+                                    import.meta.env.VITE_IMAGE_URL +
+                                    item2?.image_url
+                                  }
+                                />
+                              );
+                            }
+                          )}
+                        </div>
+                      )}
                       {!item.paragraph && item?.images && (
-                        <Stack
-                          flexDirection={"row"}
-                          justifyContent={"space-between"}
-                          width={"100%"}
-                          marginRight={"auto"}
-                          my={2}
-                        >
+                        <Stack flexDirection={"row"} columnGap={16}>
                           {item?.images?.map((item2: any, key: number) => {
                             return (
                               <img
                                 key={key}
                                 style={styles.image}
                                 src={import.meta.env.VITE_IMAGE_URL + item2}
-                                alt=""
                               />
                             );
                           })}
                         </Stack>
                       )}
-                      {/* {item?.question_image && (
-                        <Stack
-                          flexDirection={"row"}
-                          justifyContent={"space-between"}
-                          width={"60%"}
-                          marginRight={"auto"}
-                        >
+                      {item?.question_image && (
+                        <div>
                           {item?.question_image.map(
                             (item2: any, key: number) => {
                               return (
@@ -274,8 +239,8 @@ const ThinkingPDF = ({ props }: any) => {
                               );
                             }
                           )}
-                        </Stack>
-                      )} */}
+                        </div>
+                      )}
                       <Box style={styles.optionContainer} mb={4}>
                         <p style={styles.options}>{`A. ${item.Options.a}`}</p>
                         <p style={styles.options}>{`B. ${item.Options.b}`}</p>
@@ -286,20 +251,12 @@ const ThinkingPDF = ({ props }: any) => {
                   ) : (
                     <>
                       {item?.paragraph && (
-                        <Stack flexDirection={"row"} columnGap={1}>
-                          <Typography sx={styles.mainText} className="">{`${
-                            key + 1
-                          }: `}</Typography>
-                          <Typography>{`${item.paragraph}`}</Typography>
-                        </Stack>
+                        <Typography sx={{ my: "10px" }}>
+                          {`${key + 1}: ${item.paragraph}`}
+                        </Typography>
                       )}
-                      {/* {item?.paragraph && item?.images && (
-                        <Stack
-                          flexDirection={"row"}
-                          justifyContent={"space-between"}
-                          width={"70%"}
-                          marginRight={"auto"}
-                        >
+                      {item?.paragraph && item?.images && (
+                        <div>
                           {item?.images?.map((item2: any, key: any) => {
                             return (
                               <img
@@ -312,30 +269,14 @@ const ThinkingPDF = ({ props }: any) => {
                               />
                             );
                           })}
-                        </Stack>
-                      )} */}
-                      {/* {item.conversation && (
+                        </div>
+                      )}
+                      {item.conversation && (
                         <Typography sx={{ my: "10px" }}>
                           {`${item.conversation}`}
                         </Typography>
-                      )} */}
+                      )}
 
-                      {item?.conversation &&
-                        (item?.conversation && !item?.paragraph ? (
-                          // <Typography sx={{ my: "10px" }}>
-                          //   {`${item.Conversation}`}
-                          // </Typography>
-                          <Stack flexDirection={"row"} columnGap={1}>
-                            <Typography sx={styles.mainText} className="">{`${
-                              key + 1
-                            }: `}</Typography>
-                            <Typography>{`${item.conversation}`}</Typography>
-                          </Stack>
-                        ) : (
-                          <Typography sx={{ my: "10px" }}>
-                            {`${item.conversation}`}
-                          </Typography>
-                        ))}
                       {item.conversation || item.paragraph ? (
                         <Typography
                           sx={{ mt: "10px", mb: "20px", fontSize: "16px" }}
@@ -345,17 +286,12 @@ const ThinkingPDF = ({ props }: any) => {
                           <Typography sx={styles.mainText} className="">{`${
                             key + 1
                           }: `}</Typography>
-                          <Typography>{`${item.question}`}</Typography>
+                          <Typography>{` ${item.question}`}</Typography>
                         </Stack>
                       )}
+
                       {!item?.paragraph && item?.question_image && (
-                        <Stack
-                          flexDirection={"row"}
-                          justifyContent={"space-between"}
-                          width={"100%"}
-                          marginRight={"auto"}
-                          my={2}
-                        >
+                        <div>
                           {item?.question_image?.map(
                             (item2: any, key: number) => {
                               return (
@@ -366,21 +302,14 @@ const ThinkingPDF = ({ props }: any) => {
                                     import.meta.env.VITE_IMAGE_URL +
                                     item2?.image_url
                                   }
-                                  alt=""
                                 />
                               );
                             }
                           )}
-                        </Stack>
+                        </div>
                       )}
                       {!!item?.paragraph && item?.question_image && (
-                        <Stack
-                          flexDirection={"row"}
-                          justifyContent={"space-between"}
-                          width={"70%"}
-                          marginRight={"auto"}
-                          my={2}
-                        >
+                        <Stack flexDirection={"row"} columnGap={16}>
                           {item?.question_image?.map(
                             (item2: any, key: number) => {
                               return (
@@ -391,7 +320,6 @@ const ThinkingPDF = ({ props }: any) => {
                                     import.meta.env.VITE_IMAGE_URL +
                                     item2?.image_url
                                   }
-                                  alt=""
                                 />
                               );
                             }

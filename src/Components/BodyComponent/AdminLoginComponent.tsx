@@ -25,16 +25,13 @@ const LoginComponent = () => {
 
   const adminLoginMutation = useMutation({
     mutationFn: async (data: Inputs) => {
-      
       return await axiosBaseURL.post("/admin/login", data);
     },
     onSuccess: (response) => {
-     
       const user = response.data?.user;
       const accessToken = response.data?.access_token;
 
       if (user && accessToken) {
-        
         adminLogin(user, accessToken);
       }
     },

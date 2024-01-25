@@ -1,14 +1,10 @@
-import { Box, Button, Card, Container, Stack, TextField } from "@mui/material";
+import { Box, Container, Stack, TextField } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { Header1 } from "../../../Components/Common/HeaderText";
 import SelectBox from "../../../Components/Common/Select";
 import { BButton } from "../../../Components/Common/Button";
 import { generateQuestionObjects } from "./HtmlToImage";
-import {
-  ParaText1,
-  ParaText3,
-  ParaText4,
-} from "../../../Components/Common/ParaText";
+import { ParaText1 } from "../../../Components/Common/ParaText";
 import cube2 from "./Cube/Cube2";
 import cube1 from "./Cube/Cube1";
 import cube3 from "./Cube/Cube3";
@@ -23,10 +19,7 @@ import Paper1 from "./PaperFold/Paper1";
 import Mirror3 from "./Mirror/Mirror3";
 import NonVerbalPDF from "../TestSeries/Components/PDF/NonVerbalPDF";
 import DownloadPDF from "../TestSeries/Components/PDF/DownloadPDF";
-import "../../../Assets/Css/cube.css";
-import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
-import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
-import { useNavigate } from "react-router-dom";
+import "../../../Assets/Css/cube.css"
 const options = [
   {
     test_type: "Cube & Dice",
@@ -69,7 +62,7 @@ const NonVebal = () => {
   const handleAlertBoxClose1 = () => {
     setOpen1(false);
   };
-  const navigate = useNavigate();
+
   for (let index = 0; index < 25; index++) {
     const questionRef = useRef(null);
     const optionRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
@@ -81,7 +74,6 @@ const NonVebal = () => {
   //   setNewData2([]);
   // },[setSelectValue])
   const generateQuestions = async () => {
-    setLoading2(true);
     // console.log("selectd Value", selectValue);
     let newArr2: any = [];
     let count = -1;
@@ -143,11 +135,8 @@ const NonVebal = () => {
   };
   useEffect(() => {
     if (newData.length != 0) {
-      generateQuestionObjects(newData).then((res) => {
-        console.log(res);
-
+      const res = generateQuestionObjects(newData).then((res) => {
         setNewData2(res);
-        setLoading2(false);
       });
     }
   }, [newData]);
@@ -262,40 +251,6 @@ const NonVebal = () => {
         }}
         disableGutters
       >
-        <Stack direction="row">
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            sx={{ paddingRight: "1rem" }}
-            type={"button"}
-            onClick={() => navigate(-1)}
-          >
-            <ArrowBackIosNewRoundedIcon />
-            Back
-          </Button>
-
-          <Stack
-            direction="row"
-            sx={{
-              // my: "18px",
-              justifyContent: "center",
-              mx: "auto",
-              pr: { lg: "100px", xs: "0px", sm: "100px", md: "100px" },
-            }}
-          >
-            <AddBoxOutlinedIcon
-              sx={{
-                height: "28px",
-                width: "28px",
-                color: "#FA8128",
-                mx: "8px",
-                my: "auto",
-              }}
-            />
-            <Header1 header="Add Non Verbal Topics" />
-          </Stack>
-        </Stack>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -354,7 +309,7 @@ const NonVebal = () => {
             <BButton
               func={generateQuestions}
               type="button"
-              name={loading2 ? "Generating..." : "Generate"}
+              name="Generate"
               css={{}}
             />
           </Box>
@@ -364,7 +319,7 @@ const NonVebal = () => {
               <BButton
                 func={imageG}
                 type="button"
-                name={loading ? "Uploading..." : "Upload"}
+                name={loading ? "Uploading" : "Upload"}
               />
             )}
           </Box>
@@ -379,13 +334,11 @@ const NonVebal = () => {
                 data={newData2}
                 randomG={true}
                 total={newData2.length}
-                topic={
-                  selectValue === 1
-                    ? "Cubes & Dice"
-                    : selectValue === 2
-                    ? "Water & Mirror"
-                    : "Paper Folding"
-                }
+                topic={selectValue === 1
+                  ? "Cubes & Dice"
+                  : selectValue === 2
+                  ? "Water & Mirror"
+                  : "Paper Folding"}
                 set={false}
                 bol={false}
                 index={[]}
@@ -396,55 +349,49 @@ const NonVebal = () => {
           )}
         </Stack>
 
-        {
-          <Stack flexDirection={"column"} textAlign={"left"} rowGap={2} mt={5}>
-            <ParaText4
-              text={`Total_question: ${newData?.length}`}
-              css={{ fontWeight: "bold" }}
-            />
-
-            {newData?.map((item2: any, key2: number) => (
-              <Card key={item2}>
+        <Box flexDirection={"row"} textAlign={"left"}>
+          <React.Fragment>
+            { newData?.map((item2: any, key2: number) => (
+              <Stack
+                margin={"auto"}
+                width={"90%"}
+                height={"auto"}
+                spacing={2}
+                key={key2}
+                marginY={"15px"}
+              >
+                <ParaText1 text={"Q) " + item2?.question} />
+                <Box>{item2?.question_image}</Box>
                 <Stack
+                  direction={"row"}
                   margin={"auto"}
-                  width={"90%"}
-                  height={"auto"}
-                  spacing={2}
+                  width={"100%"}
                   marginY={"15px"}
+                  flexWrap={{ sm: "nowrap", xs: "wrap" }}
+                  columnGap={{ md: "20px", sm: "10px" }}
+                  rowGap={"20px"}
                 >
-                  <ParaText1 text={key2 + 1 + ") " + item2?.question} />
-                  <Box>{item2?.question_image}</Box>
-                  <Stack
-                    direction={"row"}
-                    margin={"auto"}
-                    width={"100%"}
-                    marginY={"15px"}
-                    flexWrap={{ sm: "nowrap", xs: "wrap" }}
-                    columnGap={{ md: "20px", sm: "10px" }}
-                    rowGap={"20px"}
-                  >
-                    {item2?.options?.map((item3: any, key3: number) => (
-                      <>
-                        <Box key={item3} width={"100%"}>
-                          {String.fromCharCode("A".charCodeAt(0) + key3) + ")"}
-                          {item3}
-                        </Box>
-                      </>
-                    ))}
-                  </Stack>
-                  <ParaText1
-                    text={`Answer: ${String.fromCharCode(
-                      "A".charCodeAt(0) + (item2.correct_ans - 1)
-                    )}`}
-                  />
+                  {item2?.options?.map((item3: any, key3: number) => (
+                    <>
+                      <Box key={key3} width={"100%"}>
+                        {String.fromCharCode("A".charCodeAt(0) + key3) + ")"}
+                        {item3}
+                      </Box>
+                    </>
+                  ))}
                 </Stack>
-              </Card>
+                <ParaText1
+                  text={`Answer: ${String.fromCharCode(
+                    "A".charCodeAt(0) + (item2.correct_ans - 1)
+                  )}`}
+                />
+              </Stack>
             ))}
+          </React.Fragment>
 
-            {/* <img src={svgImage} /> */}
-            {/* <ImageToSvgConverter url={"http://localhost:8000/images/car.jpg"} /> */}
-          </Stack>
-        }
+          {/* <img src={svgImage} /> */}
+          {/* <ImageToSvgConverter url={"http://localhost:8000/images/car.jpg"} /> */}
+        </Box>
       </Container>
     </>
   );

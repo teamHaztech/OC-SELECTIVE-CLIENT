@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Configuration, OpenAIApi } from "openai";
-import { Box, Pagination, Stack } from "@mui/material";
+import { Pagination, Stack } from "@mui/material";
 import QuestionCard from "../../../Components/QuestionCard";
 import { BButton2 } from "../../../../../../Components/Common/Button";
 import DownloadPDF from "../../../Components/PDF/DownloadPDF";
 import AlertBox from "../../../../../../Components/Common/AlertBox";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import adminTokenAxios from "../../../../../../Hooks/AdminTokenAxios";
-import { ParaText4 } from "../../../../../../Components/Common/ParaText";
 type CsvItem = {
   Answer: string;
   Conversation?: string;
@@ -27,8 +26,7 @@ type mapData = {
   Explanation: string;
   Options: string[];
   Question: string;
-  images: string[];
-  images: string[];
+  images?: string[];
 };
 
 interface ThinkingProps {
@@ -63,12 +61,8 @@ const Thinking = ({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentData = resData.slice(startIndex, endIndex);
-  // console.log(
-  //   Math.round(totalQuestions / csvData.length),
-  //   csvData.length,
-  //   totalQuestions
-  // );
-  // console.log("len "+resData.length);
+console.log(Math.round(totalQuestions/csvData.length),csvData.length,totalQuestions);
+
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     newPage: number
@@ -100,23 +94,17 @@ const Thinking = ({
     },
     enabled: !!category,
   });
-  // console.log((typeof setTopic === 'function'), setTopic);
-  
   let image_data = data?.data.images;
   // console.log(image_data);
-  const image_keyword = image_data?.map((item: any) => {
-    return item.image_name.toLowerCase();
-  });
-  // console.log(image_keyword);
-  
+
   const addTestCTMu = useMutation({
     mutationFn: async (data: object[]) => {
-      console.log(resData.length);
+      console.log(data);
 
       return await adminTokenAxios.post(`/admin/add-test-series-topics`, {
         tsc_id: category,
         t_name: topicName,
-        question: resData,
+        question: data,
         topic: topicGen,
         ts_id: testType,
       });
@@ -143,7 +131,7 @@ const Thinking = ({
     mutationFn: async (data: object[]) => {
       return await adminTokenAxios.put(
         `/admin/update-test-series-topics/${topicId}`,
-        { question: resData }
+        { question: data }
       );
     },
     onError: (error: any) => {
@@ -161,9 +149,6 @@ const Thinking = ({
         setCsvData([]);
         setResData([]);
         setTopic(null);
-        // if (typeof setTopic === 'function') {
-      
-        // }
         handleClose?.();
       }
     },
@@ -191,18 +176,12 @@ const Thinking = ({
           }
           return false;
         });
-        console.log(filteredCsvData);
-        
         addTestCTMu.mutate(filteredCsvData);
       } else {
-        
-        setErrMessage(
-          "upload csv in correct format"
-        );
-        handleAlertBoxOpen();
+        alert("upload csv in correct formast");
       }
     } else {
-      addTestCTMu.mutate(resData);
+      addTestCTMu.mutate(data);
     }
   };
   const handleGenerate = async () => {
@@ -237,10 +216,11 @@ const Thinking = ({
       "Explanation",
     ];
     const array2 = Object.keys(csvData[0]);
+ 
 
     if (
-      JSON.stringify(header1) === JSON.stringify(array2) ||
-      JSON.stringify(header2) === JSON.stringify(array2)
+      (JSON.stringify(header1) === JSON.stringify(array2)) ||
+      (JSON.stringify(header2) === JSON.stringify(array2))
     ) {
       const filteredCsvData = csvData.filter((item: any) => {
         if (item.Question && item.Option_D) {
@@ -249,7 +229,7 @@ const Thinking = ({
         }
         return false;
       });
-      // console.log(filteredCsvData);
+      console.log(filteredCsvData);
       newRes.mutate(filteredCsvData);
     } else {
       alert("upload csv in correct formast");
@@ -267,107 +247,100 @@ const Thinking = ({
       for (const [key, item] of csvData.entries()) {
         const topic = topicGen;
         const maleNames = [
-          "John",
-          "Nathan",
-          "Austin",
-          "Frank",
-          "Bill",
-          "Jenson",
-          "Lloyd",
-          "Oliver",
-          "Louis",
-          "Sam",
-          "Chris",
-          "David",
-          "Tom",
-          "Bobby",
-          "Dennis",
-          "Evan",
-          "Philips",
+          "Henry",
           "James",
-          "Adam",
-          "Jay",
+          "Nathan",
+          "Carl",
+          "John",
+          "Peter",
+          "Shane",
+          "Alfred",
+          "Bobby",
+          "Clive",
+          "Dennis",
+          "Lloyd",
+          "Luke",
+          "Oliver",
+          "Philip",
+          "Winston",
+          "Henry",
+          "Jackson",
+          "Charlie",
+          "Roy",
+          "Harrison",
+          "Josh",
+          "Billy",
         ];
         const femaleNames = [
-          "Alia",
+          "Alice",
           "Zoya",
-          "Ruby",
+          "Emma",
+          "Darcy",
+          "Ella",
+          "Mary",
+          "Freda",
+          "Janie",
+          "Katty",
+          "Myra",
+          "Nora",
+          "Martha",
+          "Veverly",
+          "Ruth",
+          "Jenifer",
+          "Jenifer",
+          "Diana",
           "Lucy",
           "Daisy",
           "Georgia",
-          "Sally",
-          "Nora",
-          "Amelia",
-          "Stella",
-          "Natasha",
-          "Marry",
-          "Annie",
-          "Clara",
-          "Jessie",
-          "Flora",
-          "Myra",
-          "Sarah",
-          "Alice",
+          "Matilda",
           "Eliza",
+          "Clara",
+          "Kate",
         ];
         let query = "";
-        const t_m_name = [...maleNames];
-        const t_f_name = [...femaleNames];
         // if (category == 3) {
-          query = `Generate ${Math.round(
-            totalQuestions / csvData.length
-          )} new unique questions similar to the provided example question below:
-          
+          query = `Generate ${Math.round(totalQuestions/csvData.length)} unique and challenging advanced-level practice questions designed for college students preparing for an aptitude exam on the topic of ${topic}. These questions should meet the following criteria:
+   
           Example Question:
-          ${item.Paragraph ? "Paragraph: " + item.Paragraph : ""} 
+          Paragraph:${item.Paragraph}
           ${item.Conversation ? "Conversation: " + item.Conversation : ""} 
           Question: ${item.Question}
           Options:
-            a. ${item.Option_A}
-            b. ${item.Option_B}
-            c. ${item.Option_C}
-            d. ${item.Option_D}
-          Answer: ${
-            item.Answer
-              ? item.Answer
-              : "Generate an Answer based on the question"
-          }
-          Explanation: ${
-            item.Explanation
-              ? item.Explanation
-              : "Generate an explanation based on the question and correct answer"
-          }
-          
+              a. ${item.Option_A}
+              b. ${item.Option_B}
+              c. ${item.Option_C}
+              d. ${item.Option_D}
+               Answer: ${
+                 item.Answer
+                   ? item.Answer
+                   : "Generate an Answer based on the question"
+               }
+              Explanation: ${
+                item.Explanation
+                  ? item.Explanation
+                  : "Generate an explanation based on the question and correct answer"
+              }
+  
           ---
-          
-          Follow these guidelines for generating each question:
-          
-          1. For each question, use one of the specified names in order for persons. For males, use the first name from this list: ${
-            t_m_name[Math.floor(Math.random() * 19)]
-          }, ${
-            t_m_name[Math.floor(Math.random() * 19)]
-          }. For females, use the first name from this list: ${
-            t_f_name[Math.floor(Math.random() * 19)]
-          }, ${
-            t_f_name[Math.floor(Math.random() * 19)]
-          }.
-          
-          2. Maintain the question and explanation sentence structure; only modify variables like numbers.
-          
+  
+          Please follow these guidelines for generating each MCQ:
+  
+          1. For each question, use one of the specified names in order for persons. For males, use ${maleNames.join(
+            ", "
+          )}, and for females, use ${femaleNames.join(", ")}.
+  
+          2. Maintain the question and Explanation sentence structure only modify variables like numbers.
+  
           3. Ensure that each question includes options (a, b, c, d), a correct answer, and an explanation. If an explanation is not provided, mention that one should be generated.
-          
-          4. If there is a paragraph or conversation between persons, generate that as well.
-          
-          5. Provide the correct JSON representation, and each question should adhere to the following format:
-          
+  
+          4. If there is a Paragraph ,conversation between persons, generate that as well.
+  
+          5. Provide the JSON representation of the five MCQs in the following format:
+  
           [
             {
-              ${item.Paragraph ? "Paragraph: Replace with paragraph text" : ""}
-              ${
-                item.Conversation
-                  ? "Conversation: Replace with paragraph text"
-                  : ""
-              } 
+              "Paragraph": "Replace with paragraph text"
+              "Conversation": "Replace with conversation text"
               "Question": "Replace with question text",
               "Options": {
                 "a": "Option A text",
@@ -378,10 +351,9 @@ const Thinking = ({
               "Answer": "Correct answer letter (a, b, c, or d)",
               "Explanation": "Explanation for the correct answer"
             },
-            ...
+           ....
           ]
-          `;
-          
+  `;
         // }
 
         const openAi = new OpenAIApi(
@@ -389,266 +361,164 @@ const Thinking = ({
             apiKey: import.meta.env.VITE_OPENAI_KEY,
           })
         );
-        let questions;
-        // console.log("QUERY", query);
-        try {
+        console.log("QUERY", query);
         const response = await openAi.createChatCompletion({
           model: "gpt-4",
           // model: "gpt-3.5-turbo",
           messages: [{ role: "user", content: query }],
-          temperature: 0.5,
         });
 
         const message = response?.data?.choices[0]?.message?.content;
         // const questions = message?.split("Question:");
-        // console.log(message);
-        const sanitizedJsonString = message?.replace(/[\x00-\x1F\x7F-\x9F]/g, ''); 
-          questions = sanitizedJsonString && JSON.parse(sanitizedJsonString);
-          // const questions = message?.split("Question:");
-          // console.log(questions);
-          
-          questions?.map((item: any, index: any) => {
-            // if (category == 3) {
-            // item.Paragraph = item.Paragraph.replace(/Paragraph:/g, "").replace(
-            //   /\/n/g,
-            //   ""
-            // );
-            if (
-              !item.Paragraph ||
-              item.Paragraph == "undefined" ||
-              item.Paragraph == "N/A"
-            ) {
-              // console.log(!item.Paragraph);
-              delete item.Paragraph;
-            }
-            // item.Conversation = item.Conversation.replace(
-            //   /Paragraph:/g,
-            //   ""
-            // ).replace(/\/n/g, "");
-            if (
-              !item.Conversation ||
-              item.Conversation == "undefined" ||
-              item.Conversation == "N/A"
-            ) {
-              // console.log(!item.Conversation);
-  
-              delete item.Conversation;
-            }
-  
-            // item.Paragraph =
-            //   item.Paragraph && item.Paragraph != "undefined"
-            //     ? item.Paragraph.replace(/Paragraph:/g, "").replace(/\/n/g, "")
-            //     : "";
-  
-            item.Question =
-              item.Question && item.Question != "undefined"
-                ? item.Question.replace(/Conversation:/g, "").replace(/\/n/g, "")
-                : "";
-  
-            // }
-            item.Explanation =
-              item.Explanation &&
-              item.Explanation.replace(/Explanation:/g, "").replace(/\/n/g, "");
-            // item.Question =
-            //   item.Question &&
-            //   item.Question.replace(/Question:/g, "").replace(/\/n/g, "");
-            let data: string[] = [];
-            // const keysToCheck = ["Paragraph", "Conversation", ""];
-            // const itemKeys = Object.keys(item);
-            // const exists = keysToCheck.every((key) => {
-            //   return itemKeys.includes(key);
-            // });
-  
-            // if (exists) {
-            // if (item.Paragraph || item.Conversation) {
-              const paragraphData = item.Paragraph?.split(" ") ?? [];
-              const conversationData = item.Conversation?.split(" ") ?? [];
-              const questionData = item.Question.split(" ") ?? [];
-              data = [...paragraphData, ...conversationData, ...questionData];
-              // console.log(paragraphData, conversationData, questionData);
-            // }
-            // data = [
-            //   ...item.Paragraph?.split(" "),
-            //   ...item.Conversation?.split(" "),
-            // // ];
-            // else {
-            //   data = item.Question.split(" ");
-            // }
-            // console.log(data);
-  
-            item.images = [];
-            let count: number = 0;
-            // console.log(item.images?.length);
-  
-            // if (item.images?.length !== 2) {
-            // if (exists) {
-            // const m_random = Math.floor(Math.random() * 3);
-  
-            // const m_image_urls2:string[] = [...maleNames].splice(10,10).filter((name:string)=>{
-            //   return image_keyword.includes(name)
-            // });
-            // let t = [...maleNames];
-  
-            // console.log(" girl " + m_random);
-            if (count === 0) {
-              const m_image_urls: string[] = [...maleNames]
-                .splice(0, 10)
-                .filter((name: string) => {
-                  return image_keyword.includes(name.toLowerCase());
-                });
-              // console.log(image_keyword, m_image_urls);
-  
-              for (const search of m_image_urls) {
-                const caps = search.toLowerCase();
-                const match = data.find(
-                  (word: string) => word.toLowerCase() === caps
-                );
-  
-                if (match) {
-                  // console.log(match);
-                  const url = image_data.find(
-                    (word: any) =>
-                      word.image_name.toLowerCase() === match.toLowerCase()
-                  );
-                  // console.log(url, match);
-                  item.images?.push(url.image_url);
-                  count++;
-                  break;
-                }
-              }
-            }
-  
-            if (count == 0) {
-              const g_image_urls = [...femaleNames]
-                .splice(0, 10)
-                .filter((name: string) => {
-                  return image_keyword.includes(name.toLowerCase());
-                });
-
-              for (const search of g_image_urls) {
-                // [...g_image_urls].forEach((search: string) => {
-                const caps = search.toLowerCase();
-                const match = data.find(
-                  (word: string) => word.toLowerCase() === caps
-                );
-  
-                if (match) {
-                  // console.log(match);
-                  const url = image_data.find(
-                    (word: any) =>
-                      word.image_name.toLowerCase() === match.toLowerCase()
-                  );
-                  // console.log(url, match);
-                  item.images?.push(url.image_url);
-                  count++;
-                  break;
-                }
-              }
-            }
-  
-            if (count <= 1) {
-              const m_image_urls: string[] = [...maleNames]
-                .splice(10, 10)
-                .filter((name: string) => {
-                  return image_keyword.includes(name.toLowerCase());
-                });
-              for (const search of m_image_urls) {
-                const caps = search.toLowerCase();
-                const match = data.find(
-                  (word: string) => word.toLowerCase() === caps
-                );
-  
-                if (match) {
-                  // console.log(match);
-                  const url = image_data.find(
-                    (word: any) =>
-                      word.image_name.toLowerCase() === match.toLowerCase()
-                  );
-                  // console.log(url, match);
-                  item.images?.push(url.image_url);
-                  count++;
-                  break;
-                }
-              }
-            }
-  
-            if (count <= 1) {
-              const g_image_urls = [...femaleNames]
-                .splice(10, 10)
-                .filter((name: string) => {
-                  return image_keyword.includes(name.toLowerCase());
-                });
-              for (const search of g_image_urls) {
-                const caps = search.toLowerCase();
-                const match = data.find(
-                  (word: string) => word.toLowerCase() === caps
-                );
-  
-                if (match) {
-                  // console.log(match);
-                  const url = image_data.find(
-                    (word: any) =>
-                      word.image_name.toLowerCase() === match.toLowerCase()
-                  );
-                  // console.log(url, match);
-                  item.images?.push(url.image_url);
-                  count++;
-                  break;
-                }
-              }
-            }
-            // console.log(count);
-            
-            // const g_random = Math.floor(Math.random() * 1);
-  
-            // const g_image_urls2 = femaleNames.splice(0,10).filter((name:string)=>{
-            //   image_keyword.includes(name)
-            // });
-            // console.log(" girl " + g_random);
-  
-            // }
-            // image_data.forEach(
-            //   (search: { image_name: string; image_url: string }) => {
-            //     if (item.images?.length >= 2) {
-            //       return true;
-            //     }
-            //     const caps = search.image_name.toUpperCase();
-  
-            //     const match = data.find(
-            //       (word: string) => word.toUpperCase() === caps
-            //     );
-  
-            //     if (match) {
-            //       item.images?.push(search.image_url); // Add the image URL to the question
-            //     }
-            //   }
-            // );
-            // }
-            // console.log(male,female);
-  
-            // if (item.images.length === 0) {
-            //   delete item.images;
-            // }
-  
-            responses.push(item); // Add the modified item to the responses array
-          });
+        let questions;
+        try {
+          questions = message && JSON.parse(message);
           // throw "error"
         } catch (e) {
-          console.log(e);
-          
-          setErrMessage(`Question No.- ${key + 1} is not proper in Csv`);
+          setErrMessage(`Question No.- ${key + 1} is proper in Csv`);
           handleAlertBoxOpen();
         }
         // console.log(message);
-        // console.log(questions);
-       
-        // console.log(responses);
+        console.log(questions);
+        questions?.map((item: mapData, index: any) => {
+          // if (category == 3) {
+            item.Paragraph = item.Paragraph && item.Paragraph != "undefined"
+              ? item.Paragraph.replace(/Paragraph:/g, "")
+              : "";
+              
+            item.Conversation = item.Conversation && item.Conversation != "undefined"
+              ? item.Conversation.replace(/Conversation:/g, "")
+              : "";
+           
+          // }
+          item.Explanation =
+            item.Explanation && item.Explanation.replace(/Explanation:/g, "");
+          item.Question =
+            item.Question && item.Question.replace(/Question:/g, "");
+          let data: string[] = [];
+          const keysToCheck = ["Paragraph", "Conversation", ""];
+          const itemKeys = Object.keys(item);
+          const exists = keysToCheck.every((key) => {
+            return itemKeys.includes(key);
+          }); 
+
+          // if (exists) {
+          // if (item.Paragraph || item.Conversation) {
+          const paragraphData = item.Paragraph?.split(" ") ?? [];
+          const conversationData = item.Conversation?.split(" ") ?? [];
+          const questionData = item.Question.split(" ") ?? [];
+          data = [...paragraphData, ...conversationData, ...questionData];
+          console.log(paragraphData, conversationData, questionData);
+          // console.log(data,paragraphData,conversationData,questionData);
+          // }
+
+          // data = [
+          //   ...item.Paragraph?.split(" "),
+          //   ...item.Conversation?.split(" "),
+          // // ];
+          // else {
+          //   data = item.Question.split(" ");
+          // }
+          console.log(data);
+
+          item.images = [];
+          let count: number = 1;
+          console.log(item.images?.length);
+
+          // if (item.images?.length !== 2) {
+          // if (exists) {
+            maleNames.forEach((search: string) => {
+              if (item.images?.length === 2) {
+                return true; // Exit the loop
+              }
+              const caps = search.toUpperCase();
+              let match = data.find(
+                (word: string) => word.toUpperCase() === caps
+              );
+              if (match) {
+                match = data.find(
+                  (word: string) => word.toUpperCase() === caps
+                );
+              }
+              if (match) {
+                switch (count) {
+                  case 1:
+                    item.images?.push("/images/boy.jpg");
+                    count++;
+                    break;
+                  case 2:
+                    item.images?.push("/images/left_boy.jpg");
+                    count++;
+                    break;
+                  default:
+                    item.images?.push("/images/left_boy.jpg");
+                    count++;
+                }
+              }
+              return count == 3;
+            });
+            femaleNames.forEach((search: string) => {
+              if (item.images?.length === 2) {
+                return true; // Exit the loop
+              }
+              const caps = search.toUpperCase();
+              const match = data.find(
+                (word: string) => word.replace(/:/g, "").toUpperCase() === caps
+              );
+
+              if (match) {
+                switch (count) {
+                  case 1:
+                    item.images?.push("/images/right_girl.jpg");
+                    count++;
+                    break;
+                  case 2:
+                    item.images?.push("/images/girl.jpg");
+                    count++;
+                    break;
+                  case 3:
+                  default:
+                    item.images?.push("/images/girl.jpg");
+                    count++;
+                }
+              }
+              return count == 3;
+            });
+          // }
+          image_data.forEach(
+            (search: { image_name: string; image_url: string }) => {
+              if (item.images?.length === 1) {
+                return true; // Exit the loop
+              }
+              const caps = search.image_name.toUpperCase();
+
+              const match = data.find(
+                (word: string) => word.toUpperCase() === caps
+              );
+
+              if (match) {
+                item.images?.push(search.image_url); // Add the image URL to the question
+              }
+
+              return item.images?.length === 3;
+            }
+          );
+          // }
+          // console.log(male,female);
+
+          if (item.images?.length === 0) {
+            delete item.images;
+          }
+
+          responses.push(item); // Add the modified item to the responses array
+        });
+        console.log(responses);
       }
-      console.log(responses);
       setResData(responses);
       return responses;
     },
     onSuccess: (data: any) => {
+     
       console.log("Success Data", data);
     },
     onError: (error) => {
@@ -678,10 +548,7 @@ const Thinking = ({
         bol={open2}
         handleAlertBoxClose={handleAlertBoxClose2}
       />
-      <Box marginY={5} marginLeft={2}>
-      <ParaText4 text={`Total Question Generated: ${resData.length}`} css={{fontWeight:"bold"}}/>
 
-      </Box>
       {!edit
         ? (csvData.length > 0 || category == "1") && (
             <Stack marginY="1rem" direction="row" spacing={2}>
@@ -735,7 +602,7 @@ const Thinking = ({
               {resData.length == 0 &&
                 category != 2 &&
                 (newRes.isLoading ? (
-                  <BButton2 type="button" name="Re-Generating..." />
+                  <BButton2 type="button" name="Generating..." />
                 ) : (
                   <BButton2
                     type="button"
@@ -779,7 +646,7 @@ const Thinking = ({
       {/* )} */}
       {resData?.length > 1 && (
         <>
-          {/* <Stack alignItems={"center"} mt={2} mb={1}>
+          <Stack alignItems={"center"} mt={2} mb={1}>
             <Pagination
               color="secondary"
               variant="outlined"
@@ -787,7 +654,7 @@ const Thinking = ({
               page={currentPage}
               onChange={handlePageChange}
             />
-          </Stack> */}
+          </Stack>
           <Stack spacing={2}>
             {currentData?.map((questionData: any, index: any) => (
               <QuestionCard
@@ -799,11 +666,10 @@ const Thinking = ({
                 question={questionData?.Question}
                 options={questionData?.Options}
                 answer={questionData?.Answer}
-                explanation={questionData?.Explanation}
-                index={index}
-                data={resData}
-                updateData={setResData}
-              />
+                explanation={questionData?.Explanation} 
+                index={index} 
+                data={resData} 
+                updateData={setResData}              />
             ))}
           </Stack>
           <Stack alignItems={"center"} mt={2} mb={1}>

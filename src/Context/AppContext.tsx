@@ -136,10 +136,7 @@ const MainContext: React.FC<MainContextProps> = ({ children }) => {
   });
 
   const AdminLogout = useMutation({
-    
-    
     mutationFn: async () => {
-      console.log("logout ");
       return await adminTokenAxios.post("/admin/logout", null);
     },
     onSuccess: (response) => {
@@ -148,7 +145,7 @@ const MainContext: React.FC<MainContextProps> = ({ children }) => {
       dispatch({ type: "SET_ADMINTOKEN", payload: "" });
       localStorage.removeItem("admin");
       dispatch({ type: "SET_ADMIN", payload: "" });
-      navigate("/admin/login");
+      navigate("/");
       handleCloseUserMenu();
       handleMenuClose();
     },
@@ -177,13 +174,12 @@ const MainContext: React.FC<MainContextProps> = ({ children }) => {
   };
 
   const adminLogin = (data: userData, token: string) => {
-    
     localStorage.setItem("admin_token", token);
     dispatch({ type: "SET_ADMINTOKEN", payload: token });
     localStorage.setItem("admin", JSON.stringify(data));
     dispatch({ type: "SET_ADMIN", payload: JSON.stringify(data) });
- 
-    navigate("/admin/");
+    
+    navigate("/admin");
   };
 
   const Logout = () => {

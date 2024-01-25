@@ -12,8 +12,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DemoQuestionComp from "../../Pages/User/TestResultAnalysis/Components/DemoQuestionComp";
 import { ParaText1, ParaText3 } from "../Common/ParaText";
 import { Divider } from "@mui/material";
-import { useContext, useEffect } from "react";
-import { TempContext } from "../../Context/TempContext";
 
 const style = {
   position: "absolute" as "absolute",
@@ -37,17 +35,10 @@ interface ModalProps {
   handleClose?: () => void;
   open: boolean;
   data: any;
-  tsc_id: any;
 }
 
-const DemoQuestionModal = ({ handleClose, open, data, tsc_id }: ModalProps) => {
-  // console.log("mutation", data?.data?.topic_questions);
-  const { setSuccess, setShowPDF, setPayment_id } = useContext(TempContext);
-  useEffect(() => {
-    setPayment_id([]);
-    setShowPDF(false);
-    setSuccess(false);
-  }, [open]);
+const DemoQuestionModal = ({ handleClose, open, data }: ModalProps) => {
+  console.log("mutation", data?.data?.topic_questions);
   return (
     <div>
       <Modal
@@ -88,7 +79,7 @@ const DemoQuestionModal = ({ handleClose, open, data, tsc_id }: ModalProps) => {
                 borderWidth: "1px",
                 borderRadius: "3px",
                 width: "100%",
-                my: "10px",
+                my:'10px'
               }}
             />
             <Box mt={3}>
@@ -97,18 +88,14 @@ const DemoQuestionModal = ({ handleClose, open, data, tsc_id }: ModalProps) => {
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
-                    id={item.id}
-                    // onClick={(e)=>console.log(e.target)}
+                    id="panel1a-header"
                   >
-                    <ParaText3 text={item.topic} />
+                    <ParaText3 text={item.topic}/>
                   </AccordionSummary>
                   <AccordionDetails>
                     <DemoQuestionComp
                       questions={item?.get_question}
                       total_questions={item}
-                      handleClose={handleClose}
-                      tsc_id={tsc_id}
-                      tst_id={item.id}
                     />
                   </AccordionDetails>
                 </Accordion>

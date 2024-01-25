@@ -85,7 +85,7 @@ const DownloadPDF = ({
 
   useEffect(() => {
     const questions: questions[] = data;
-    // console.log(questions);
+    console.log(questions);
 
     // console.log(questions?.length < total);
     if (randomG) {
@@ -156,7 +156,7 @@ const DownloadPDF = ({
   //   selected_question = questions;
   // }
 
-  // console.log( total,data,selected_question);
+  // console.log( selected_question,data);
   return (
     <>
       <Box display={"none"}>

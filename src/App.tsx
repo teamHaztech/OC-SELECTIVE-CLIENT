@@ -16,11 +16,10 @@ import Test3 from "./Pages/test3";
 import TestSeries from "./Pages/User/TestSchedule/TestSeries";
 import { AppContext } from "./Context/AppContext";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import PrivacyPolicy from "./Pages/Website/Terms/PrivacyPolicy";
 
 const initialOptions = {
   clientId:import.meta.env.VITE_PAYPAL_CLIENT_ID,
-  currency: "AUD",
+  currency: "USD",
   intent: "capture",
 };
 
@@ -96,7 +95,7 @@ function App() {
         <MainCartContext>
           <Routes>
             <Route path="/*" element={<Index />} />
-            
+
             <Route
               path="/user/Test-schedule/Exam-section/:id"
               element={user ? <Exam_Section /> : <Index />}

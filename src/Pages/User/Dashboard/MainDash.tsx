@@ -24,8 +24,7 @@ const MainDash = () => {
       return await response.data;
     },
   });
-  console.log(getUserSetQuery);
-  
+
   const getRemaingProductQuery = useQuery({
     queryKey: ["get-remaining-product"],
     queryFn: async () => {
@@ -65,16 +64,17 @@ const MainDash = () => {
       const response = await tokenAxios.get(
         `check-user-purchase-expire/${user?.id}`
       );
-      return  response.data;
+
+      return await response;
     },
   });
 
   const getLatestProductQuery = useQuery({
     queryKey: ["get-latest-product"],
     queryFn: async () => {
-      const response = await tokenAxios.get(`get-latest-product/${user?.id}`);
+      const response = await tokenAxios.get(`get-latest-product`);
 
-      return response.data;
+      return await response.data;
     },
   });
 
@@ -88,12 +88,11 @@ const MainDash = () => {
       return await response.data;
     },
   });
-console.log(packageExpireQuery?.data);
 
   return (
     <>
-      {packageExpireQuery?.data?.tsp != 0 && (
-        <NotificationStrip data={packageExpireQuery?.data?.tsp} />
+      {packageExpireQuery?.data?.status === 403 && (
+        <NotificationStrip data={packageExpireQuery?.data?.data?.tsp} />
       )}
 
       <Stack direction="row" sx={{ my: "8px", justifyContent: "center" }}>

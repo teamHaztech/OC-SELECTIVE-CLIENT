@@ -18,7 +18,6 @@ import TestScheduleIndex from "./TestSchedule/TestScheduleIndex";
 import Exam_Section from "./TestSchedule/Exam_Section";
 import UserFooter from "../../Components/Footer/UserFooter";
 import TestSeries from "./TestSchedule/TestSeries";
-import FeedbackPage from "./Feedback/FeedbackPage";
 
 const UserIndex = () => {
   const { user, Logout } = AppContext();
@@ -154,7 +153,6 @@ const UserIndex = () => {
               <Route path="/profile" element={<ProfileIndex />} />
               <Route path="/Test-result-analysis/*" element={<TestRAIndex />} />
               <Route path="/Test-schedule/*" element={<TestScheduleIndex />} />
-              <Route path="/FeedBack-Form" element={<FeedbackPage />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>
             <UserFooter />

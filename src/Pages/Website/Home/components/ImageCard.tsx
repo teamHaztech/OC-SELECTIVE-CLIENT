@@ -15,16 +15,16 @@ const ImageCard = () => {
         width: { lg: '595px', xs: '300px' }, height: '373px'
       }}>
         <Box sx={{ display: 'flex', p: '4px', }}>
-          {/* <PhoneIcon sx={{ color: '#FFFFFF', width: '30px', height: '30px', mx: '12px' }} /> */}
-          {/* <ParaText2 text="+61 8888889993" /> */}
+          <PhoneIcon sx={{ color: '#FFFFFF', width: '30px', height: '30px', mx: '12px' }} />
+          <ParaText2 text="+61 8888889993" />
         </Box>
         <Box sx={{ display: 'flex', p: '4px', }}>
-          {/* <EmailIcon sx={{ color: '#FFFFFF', width: '30px', height: '30px', mx: '12px' }} /> */}
-          {/* <ParaText2 text="aiedtech@gmail.com" /> */}
+          <EmailIcon sx={{ color: '#FFFFFF', width: '30px', height: '30px', mx: '12px' }} />
+          <ParaText2 text="aiedtech@gmail.com" />
         </Box>
         <Box sx={{ display: 'flex', p: '4px', }}>
-          {/* <LanguageIcon sx={{ color: '#FFFFFF', width: '30px', height: '30px', mx: '12px' }} /> */}
-          {/* <ParaText2 text="www.aiedtech.com" /> */}
+          <LanguageIcon sx={{ color: '#FFFFFF', width: '30px', height: '30px', mx: '12px' }} />
+          <ParaText2 text="www.aiedtech.com" />
         </Box>
       </CardContent>
       <CardMedia component="img" alt="no" image={img}

@@ -6,7 +6,6 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  Tooltip,
 } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -20,14 +19,12 @@ import { UserContext } from "../../../Context/UserContext";
 import LoadingBar from "../../../Components/Headers/LoadingBar";
 import { Link } from "react-router-dom";
 
-const header = ["Sr. No", "Test name", "Price", "Buy Tests"];
+const header = ["Sr. No", "Test name", "Price", ""];
 
 const FirstSectionTwo = ({ data }: any) => {
   const queryClient = useQueryClient();
-  const { cart, removeFromCart, cartUpdate } = CartContext();
+  // const { cart, removeFromCart, cartUpdate } = CartContext();
   const { user } = AppContext();
-  const allProduct = data?.data?.remaining_product;
-
   // const { handlePUSuccessOpen2 } = UserContext();
   // const purchaseMU = useMutation({
   //   mutationFn: async (p_id: number) => {
@@ -58,22 +55,21 @@ const FirstSectionTwo = ({ data }: any) => {
 
   return (
     <Container maxWidth="xl">
-      <Header1 header="Buy Online Tests " />
+      <Header1 header="Buy Test Packages" />
       <Card sx={{ boxShadow: "5px 5px 20px 0px #808080", my: "15px" }}>
         <TableContainer>
           <Table sx={{ minWidth: 650 }}>
             <TableHeader header={header} />
             <TableBody>
-              {allProduct?.length === 0 ? (
+              {data?.data?.remaining_product?.length === 0 ? (
                 <TableRow>
                   <TableCell align="center" sx={{ border: 0 }} colSpan={5}>
                     No Item Found
                   </TableCell>
                 </TableRow>
               ) : (
-                allProduct.map((item: any, key: number) => {
+                data?.data?.remaining_product.map((item: any, key: number) => {
                   // console.log(item.tsp_id);
-                  // if(cart.includes(item.id)){
 
                   return (
                     <TableRow key={key}>
@@ -84,28 +80,25 @@ const FirstSectionTwo = ({ data }: any) => {
                         {item.p_name}
                       </TableCell>
                       {/* <TableCell align="center" sx={{ border: 0 }}>
-                          {item.duration}
-                        </TableCell> */}
+                        {item.duration}
+                      </TableCell> */}
                       <TableCell align="center" sx={{ border: 0 }}>
                         {item.p_price}
                       </TableCell>
                       <TableCell align="center" sx={{ border: 0 }}>
                         <Link to={`/product/${item.id}`}>
-                          <Tooltip title="Buy Test" arrow>
-                            <ShoppingCartIcon
-                              sx={{
-                                width: "25px",
-                                height: "25px",
-                                color: "#3A9BDC",
-                              }}
-                              // onClick={() => purchaseMU.mutate(item.tsp_id)}
-                            />
-                          </Tooltip>
+                          <ShoppingCartIcon
+                            sx={{
+                              width: "25px",
+                              height: "25px",
+                              color: "#3A9BDC",
+                            }}
+                            // onClick={() => purchaseMU.mutate(item.tsp_id)}
+                          />
                         </Link>
                       </TableCell>
                     </TableRow>
                   );
-                  // }
                 })
               )}
             </TableBody>

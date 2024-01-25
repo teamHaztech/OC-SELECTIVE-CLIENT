@@ -1,4 +1,4 @@
-import { Box, Pagination, Stack } from "@mui/material";
+import { Pagination, Stack } from "@mui/material";
 import React, { useState } from "react";
 import QuestionCard from "../../../Components/QuestionCard";
 import { BButton2 } from "../../../../../../Components/Common/Button";
@@ -7,7 +7,6 @@ import adminTokenAxios from "../../../../../../Hooks/AdminTokenAxios";
 import { Configuration, OpenAIApi } from "openai";
 import AlertBox from "../../../../../../Components/Common/AlertBox";
 import DownloadPDF from "../../../Components/PDF/DownloadPDF";
-import { ParaText4 } from "../../../../../../Components/Common/ParaText";
 
 type mapData = {
   Conversation?: string;
@@ -16,8 +15,7 @@ type mapData = {
   Explanation: string;
   Options: string[];
   Question: string;
-  images: string[];
-  images: string[];
+  images?: string[];
 };
 
 interface MathProps {
@@ -35,7 +33,6 @@ const MathGen = ({
   handleClose,
 }: MathProps) => {
   const [category, topicGen, totalQuestions, testType, topicName] = formData;
-  // console.log(formData);
 
   const [resData, setResData] = useState([]);
   const [open, setOpen] = useState<boolean>(false);
@@ -75,24 +72,19 @@ const MathGen = ({
     queryFn: async () => {
       return await adminTokenAxios.get(`/admin/get-image/${category}`);
     },
-    // enabled: !!category,
-    // enabled: !!category,
+    enabled: !!category,
   });
   let image_data = data?.data.images;
   // console.log(image_data);
-  const image_keyword = image_data?.map((item: any) => {
-    return item.image_name;
-  });
-  // console.log(image_keyword);
+
   const addTestCTMu = useMutation({
     mutationFn: async (data: object[]) => {
-      // console.log(data);
-      // console.log(data);
+      console.log(data);
 
       return await adminTokenAxios.post(`/admin/add-test-series-topics`, {
         tsc_id: category,
         t_name: topicName,
-        question: resData,
+        question: data,
         topic: topicGen,
         ts_id: testType,
       });
@@ -102,8 +94,7 @@ const MathGen = ({
     },
     onSuccess: (res: any) => {
       if (res.status == 200) {
-        // console.log(res);
-        // console.log(res);
+        console.log(res);
         handleAlertBoxOpen2();
         // navigate(`/admin/test-series/view-test-series-topics`);
         reset({
@@ -120,7 +111,7 @@ const MathGen = ({
     mutationFn: async (data: object[]) => {
       return await adminTokenAxios.put(
         `/admin/update-test-series-topics/${topicId}`,
-        { question: resData }
+        { question: data }
       );
     },
     onError: (error: any) => {
@@ -128,7 +119,7 @@ const MathGen = ({
     },
     onSuccess: (res: any) => {
       if (res.status == 200) {
-        // console.log(res);
+        console.log(res);
         handleAlertBoxOpen2();
         // navigate(`/admin/test-series/view-test-series-topics`);
         // reset({
@@ -217,9 +208,7 @@ const MathGen = ({
         query = `Generate total ${totalQuestions} unique and exceptionally challenging advanced-level practice questions designed for 25-year-old college students preparing for an aptitude exam on the topic of ${topic} that should be extremely difficult, requiring a high IQ of 140 and above.
 
         Criteria:
-        - Scenario: Each question should intricately incorporate a real-life story or scenario related to the topic and make use of this  keyword in question ${image_keyword.join(
-          ","
-        )} , making it profoundly contextually rich and engaging. No limit in how long the question is.
+        - Scenario: Each question should intricately incorporate a real-life story or scenario related to the topic, making it profoundly contextually rich and engaging.No limit in how long the question is.
         - Complexity: Ensure that the questions are not just challenging, but they should demand an exceptional level of critical thinking and intellectual prowess, reflecting the highest standards of advanced-level aptitude exams.
         - Explanation: Furnish a detailed and elaborate explanation for the correct answer to help students comprehend the underlying concepts, encouraging a deep understanding of the subject matter.
         
@@ -241,19 +230,16 @@ const MathGen = ({
             "Explanation": "Provide an in-depth and comprehensive explanation for the correct answer, unraveling the intricate details of the scenario and solution."
           },
           ......
-           generate ${
-             totalQuestions - 1
-           }  more like this and in total ${totalQuestions}
+           generate ${totalQuestions-1}  more like this and in total ${totalQuestions}
            
         ]
         `;
+        
       } else {
         query = `Generate ${totalQuestions} unique and challenging advanced-level practice word questions designed for 25 college year students who are preparing for an aptitude exam on the topic of ${topic}. Each question should be based on real-life scenarios, and no limit in how long the question is. 
         Ensure the following criteria for each question:
 
-        1. Scenario: Incorporate a real-life scenario that relates to the topic and make use of this keyword in question ${image_keyword.join(
-          ","
-        )}.
+        1. Scenario: Incorporate a real-life scenario that relates to the topic and makes the question contextually rich.
         2. Clarity: Craft questions that are clear, concise, and easily understandable for 25 college year students.
         3. Diversity: Create a diverse set of questions that cover various aspects of the topic.
         5. Complexity: Ensure that answer choices are complex and require critical thinking.
@@ -276,7 +262,7 @@ const MathGen = ({
         "Explanation": "Detailed explanation for the correct answer"
       },
       ......
-      generate ${totalQuestions - 1} more like this 
+      generate ${totalQuestions-1} more like this 
       
    
     ]
@@ -302,59 +288,48 @@ const MathGen = ({
         questions = message && JSON.parse(message);
         // throw "error"
       } catch (e) {
-        setErrMessage(`Something went wrong. Please try again`);
-        setErrMessage(`Something went wrong. Please try again`);
+        setErrMessage(`something went wrong`);
         handleAlertBoxOpen();
       }
       // console.log(message);
-      // console.log("parsed", questions);
+      console.log("parsed", questions);
       questions?.map((item: mapData, index: any) => {
         item.Explanation =
-          item.Explanation &&
-          item.Explanation.replace(/Explanation:/g, "").replace(/\/n/g, "");
+          item.Explanation && item.Explanation.replace(/Explanation:/g, "");
         item.Question =
-          item.Question &&
-          item.Question.replace(/Question:/g, "").replace(/\/n/g, "");
-        const questionData = item.Question.split(" ") ?? [];
-        let data: string[] = questionData;
+          item.Question && item.Question.replace(/Question:/g, "");
+        let data: string[] = [];
         item.images = [];
         let count: number = 1;
-        // console.log(data);
+        console.log(item.images?.length);
 
         image_data?.forEach(
           (search: { image_name: string; image_url: string }) => {
-            // console.log(item.images.length);
-            if (item.images.length === 1) {
-              return true;
+            if (item.images?.length === 1) {
+              return true; 
             }
-
             const caps = search.image_name.toUpperCase();
 
-            const match = data.find((word: string) => {
-              // console.log(word.toUpperCase(), caps);
-              return word.toUpperCase() === caps;
-            });
+            const match = data.find(
+              (word: string) => word.toUpperCase() === caps
+            );
 
             if (match) {
-              item.images.push(search.image_url); // Add the image URL to the question
-              item.images.push(search.image_url); // Add the image URL to the question
+              item.images?.push(search.image_url); // Add the image URL to the question
             }
+           
           }
         );
-        // }
+       // }
         // console.log(male,female);
 
-        // if (item.images?.length === 0) {
-        //   delete item.images;
-        // }
-        // if (item.images?.length === 0) {
-        //   delete item.images;
-        // }
+        if (item.images?.length === 0) {
+          delete item.images;
+        }
 
         responses.push(item); // Add the modified item to the responses array
       });
-      // console.log("final", responses);
-      // console.log("final", responses);
+      console.log("final", responses);
       return responses;
     },
 
@@ -387,12 +362,7 @@ const MathGen = ({
         bol={open2}
         handleAlertBoxClose={handleAlertBoxClose2}
       />
-      <Box marginY={5} marginLeft={2}>
-        <ParaText4
-          text={`Total Question Generated: ${resData.length}`}
-          css={{ fontWeight: "bold" }}
-        />
-      </Box>
+
       {!edit
         ? category == "1" && (
             <Stack marginY="1rem" direction="row" spacing={2}>
@@ -405,7 +375,6 @@ const MathGen = ({
                     type="button"
                     func={handleGenerate}
                     name="Generate"
-                    disabled={!totalQuestions}
                   />
                 ))}
               {resData.length != 0 && newRes.data && totalQuestions && (
@@ -453,7 +422,6 @@ const MathGen = ({
                     type="button"
                     func={handleGenerate}
                     name="Re-Generate"
-                    disabled={!totalQuestions}
                   />
                 ))}
               {/* {resData.length != 0 && newRes.data && (

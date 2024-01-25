@@ -16,7 +16,7 @@ const ThirdSection = () => {
     return (
         <Container maxWidth={false} sx={{ width: '98%', py: '15px', }} id="third">
             <Box sx={{ display: 'flex', alignItems: 'left', width: '100%', }}>
-                {/* <Header1 header='Features' /> */}
+                <Header1 header='Features' />
             </Box>
             <Box 
             sx={{ display:'flex', flexWrap:'wrap', justifyContent:'space-between', 

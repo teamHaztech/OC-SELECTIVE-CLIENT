@@ -19,7 +19,7 @@ const ViewThirdSection = ({ data }: any) => {
     labels: question_number,
     datasets: [
       {
-        label: "Minutes",
+        label: "Seconds",
         data: data.data?.question_time,
         backgroundColor: "#3A9BDC",
       },

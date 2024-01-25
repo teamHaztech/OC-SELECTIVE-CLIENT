@@ -234,7 +234,7 @@ const Reading = ({
       <>
         {!edit && (
           <Stack direction="row">
-            <Button
+            {/* <Button
               onClick={() => navigate(-1)}
               size="small"
               variant="contained"
@@ -243,7 +243,7 @@ const Reading = ({
             >
               <ArrowBackIosNewRoundedIcon />
               Back
-            </Button>
+            </Button> */}
 
             <Stack
               direction="row"

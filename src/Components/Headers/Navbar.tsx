@@ -56,13 +56,13 @@ const Navbar = () => {
 
     { name: "Home", url: "/#home", icon: <HomeOutlinedIcon sx={pCss} /> },
     {
-      name: "Buy Online Tests",
+      name: "Buy Test Series",
       url: "/#product",
       icon: <FeedOutlinedIcon sx={pCss} />,
     },
     {
-      name: "Free Resources",
-      url: "/free-resources",
+      name: "Features",
+      url: "/#third",
       icon: <FeaturedPlayListOutlinedIcon sx={pCss} />,
     },
     {
@@ -165,7 +165,10 @@ const Navbar = () => {
                   }}
                 >
                   <Link to="/">
-                    <img src={img} style={{ width: "100%", height: "100%" }} />
+                    <img
+                      src={img}
+                      style={{ width: "100%", height: "100%" }}
+                    />
                   </Link>
                 </Box>
 
@@ -208,58 +211,39 @@ const Navbar = () => {
 
             {/* PC View setting option */}
             <Box sx={{ flexGrow: 0 }}>
-              {user ? (
-                <Stack spacing={2} direction="row" padding={1}>
-                  <Tooltip
-                    title="Profile"
-                    sx={{
-                      display: {
-                        xs: "none",
-                        sm: "none",
-                        md: "none",
-                        lg: "block",
-                      },
-                    }}
-                  >
+              <Tooltip
+                title="Open settings"
+                sx={{
+                  display: { xs: "none", sm: "none", md: "none", lg: "block" },
+                }}
+              >
+                {user ? (
+                  <Stack spacing={2} direction="row" padding={1}>
                     <Link to="/user/profile">
                       <PIButton
                         css={{ p: "6px", height: "60px", width: "60px" }}
                       />
                     </Link>
-                  </Tooltip>
-                  <Tooltip
-                    title="Open settings"
-                    sx={{
-                      display: {
-                        xs: "none",
-                        sm: "none",
-                        md: "none",
-                        lg: "block",
-                      },
-                    }}
-                  >
-                     <Link to="">
                     <SIButton
                       css={{ p: "6px", height: "60px", width: "60px" }}
                       func={handleOpenUserMenu}
                     />
-                     </Link>
-                  </Tooltip>
-                </Stack>
-              ) : (
-                <Stack spacing={2} direction="row">
-                  <WButton
-                    name="login"
-                    func={() => handleClickOpen("1")}
-                    css={{ width: "127px" }}
-                  />
-                  <OButton
-                    name="Register"
-                    func={() => handleClickOpen("2")}
-                    css={{ width: "127px" }}
-                  />
-                </Stack>
-              )}
+                  </Stack>
+                ) : (
+                  <Stack spacing={2} direction="row">
+                    <WButton
+                      name="login"
+                      func={() => handleClickOpen("1")}
+                      css={{ width: "127px" }}
+                    />
+                    <OButton
+                      name="Register"
+                      func={() => handleClickOpen("2")}
+                      css={{ width: "127px" }}
+                    />
+                  </Stack>
+                )}
+              </Tooltip>
 
               <MenuModel />
             </Box>

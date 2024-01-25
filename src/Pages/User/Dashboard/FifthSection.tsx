@@ -13,7 +13,7 @@ const header = [
   "Percentage(%)",
   "Total Marks",
   "Test name",
-  "Status",
+  // "Subject",
   // "Rank",
 ];
 const tableData = [

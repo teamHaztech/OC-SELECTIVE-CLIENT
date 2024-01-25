@@ -31,8 +31,7 @@ import { useState } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import adminTokenAxios from "../../../../Hooks/AdminTokenAxios";
 import AlertBox from "../../../../Components/Common/AlertBox";
-import { height } from "@mui/system";
-import img from "../../../../Assets/images/product.jpg";
+
 interface Detail {
   title: string;
   data: string;
@@ -100,7 +99,7 @@ const SectionOne = ({ product }: any) => {
     { title: "Price", data: product?.p_price },
     // { title: "Duration", data: product.duration },
     { title: "Test Month Limit", data: product?.test_month_limit },
-    // { title: "Total Question", data: product?.total_question },
+    { title: "Total Question", data: product?.total_question },
     { title: "Release Date", data: product?.release_date },
   ];
 
@@ -143,7 +142,7 @@ const SectionOne = ({ product }: any) => {
               <EditIconButton
                 type="button"
                 func={handlePREditOpen}
-                // disabled={product?.release_status}
+                disabled={product?.release_status}
               />
               <DeleteIconButton
                 type="button"
@@ -163,51 +162,29 @@ const SectionOne = ({ product }: any) => {
             }}
           />
         </Stack>
-        <Stack
-          flexDirection={"row"}
-          justifyContent={"space-between"}
-          width={"100%"}
-        >
-          <Box sx={{ width: "90%" }}>
-            {details?.map((item: Detail, key: number) => {
-              return (
-                <Stack
-                  //   flexDirection="row"
-                  //   sx={{ alignItems: "center", justifyContent: "space-between" }}
-                  marginY="1rem"
-                  //   marginBottom="50px"
-                  key={key}
-                >
-                  <Grid container spacing={2}>
-                    <Grid xs={4}>
-                      <ParaText3 text={item?.title} />
-                    </Grid>
-                    <Grid xs={8}>
-                      <ParaText1 text={item?.data} css={{ m: "0", p: 0 }} />
-                    </Grid>
+        <Box>
+          {details?.map((item: Detail, key: number) => {
+            return (
+              <Stack
+                //   flexDirection="row"
+                //   sx={{ alignItems: "center", justifyContent: "space-between" }}
+                marginY="1rem"
+                //   marginBottom="50px"
+                key={key}
+              >
+                <Grid container spacing={2}>
+                  <Grid xs={4}>
+                    <ParaText3 text={item?.title} />
                   </Grid>
-                </Stack>
-              );
-            })}
-          </Box>
-          <Box
-            sx={{
-              width: "30%",
-              p: 0,
-              m: 0,
-              py: "7px",
-            }}
-          >
-            <img
-              style={{ width: "100%", aspectRatio: "3/3" }}
-              src={
-                product?.p_image
-                  ? import.meta.env.VITE_IMAGE_URL + product?.p_image
-                  : img
-              }
-            />
-          </Box>
-        </Stack>
+                  <Grid xs={8}>
+                    <ParaText1 text={item?.data} css={{ m: "0", p: 0 }} />
+                  </Grid>
+                </Grid>
+              </Stack>
+            );
+          })}
+        </Box>
+        <Box sx={{ width: "100%", textAlign: "right" }}></Box>
       </Card>
     </>
   );

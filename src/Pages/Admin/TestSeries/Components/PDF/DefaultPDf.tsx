@@ -11,11 +11,6 @@ const styles = {
     padding: 20,
     // breakAfter: "page",
   },
-  optionsImage2: {
-    fontSize: 16,
-    // marginTop: 2,
-    // marginBottom: 2,
-  },
   section: {
     margin: 10,
   },
@@ -84,9 +79,8 @@ const styles = {
     textAlign: "center" as const,
   },
   image: {
-    maxWidth: "300px",
-    maxHeight: "150px",
-    marginLeft:"auto"
+    maxWidth: "150px",
+    height: "110px",
   },
   optionImage: {
     width: "100px",
@@ -131,7 +125,7 @@ type questions = {
 const DefaultPDf = ({ props }: any) => {
   const { selected_question, topic, index } = props;
   let count = 1;
-  // console.log(selected_question,"d");
+  console.log(selected_question,"d");
   return (
     <Box>
       <Box
@@ -161,21 +155,18 @@ const DefaultPDf = ({ props }: any) => {
                   //   (key + 1) % 3 === 0 ? "break-after-page" : ""
                   // }  mt-10`}
                 >
+              
                   {item?.Options ? (
                     <>
                       {item.Question && (
-                        <Stack
-                          flexDirection={"row"}
-                          columnGap={1}
-                          width={"100%"}
-                        >
+                        <Stack flexDirection={"row"} columnGap={1}>
                           <Typography sx={styles.mainText} className="">{`${
                             key + 1
                           }: `}</Typography>
                           <Typography>{` ${item.Question}`}</Typography>
                         </Stack>
                       )}
-                      {/* {item?.question_image && (
+                      {item?.question_image && (
                         <div>
                           {item?.question_image?.map(
                             (item2: any, key: number) => {
@@ -189,21 +180,15 @@ const DefaultPDf = ({ props }: any) => {
                             }
                           )}
                         </div>
-                      )} */}
+                      )}
                       {item?.images && (
-                        <Stack
-                          flexDirection={"row"}
-                          justifyContent={"space-between"}
-                          width={"100%"}
-                          marginRight={"auto"}
-                        >
+                        <Stack flexDirection={"row"} columnGap={16}>
                           {item?.images?.map((item2: any, key: number) => {
                             return (
                               <img
                                 key={key}
                                 style={styles.image}
                                 src={import.meta.env.VITE_IMAGE_URL + item2}
-                                alt=""
                               />
                             );
                           })}
@@ -229,12 +214,7 @@ const DefaultPDf = ({ props }: any) => {
                       )}
 
                       {item?.question_image && (
-                        <Stack
-                          flexDirection={"row"}
-                          justifyContent={"space-between"}
-                          width={"100%"}
-                          // marginLeft={"auto"}
-                        >
+                        <div>
                           {item?.question_image?.map(
                             (item2: any, key: number) => {
                               return (
@@ -245,92 +225,15 @@ const DefaultPDf = ({ props }: any) => {
                                     import.meta.env.VITE_IMAGE_URL +
                                     item2?.image_url
                                   }
-                                  alt=""
                                 />
                               );
                             }
                           )}
-                        </Stack>
+                        </div>
                       )}
 
                       <div style={styles.optionContainer}>
-                        {item?.option_1?.split(".")[1] === "png" ||
-                        item?.option_1?.split(".")[1] === "jpg" ||
-                        item?.option_1?.split(".")[1] === "jpeg" ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <div
-                              style={{
-                                ...styles.optionContainer,
-                                display: "flex",
-                                // flexDirection: "row",
-                              }}
-                            >
-                              <p style={styles.options}>A.</p>
-                              <img
-                                style={styles.optionsImage2}
-                                src={
-                                  import.meta.env.VITE_IMAGE_URL + item.option_1
-                                }
-                                alt=""
-                              />
-                            </div>
-
-                            {/* <Text>{`${import.meta.env.VITE_IMAGE_OAPI_URL}${item.option_2?.split("/")[3]}`}</Text> */}
-                            <div
-                              style={{
-                                ...styles.optionContainer,
-                                display: "flex",
-                                // flexDirection: "row",
-                              }}
-                            >
-                              <p style={styles.options}>B.</p>
-                              <img
-                                style={styles.optionsImage2}
-                                src={
-                                  import.meta.env.VITE_IMAGE_URL + item.option_2
-                                }
-                              />
-                            </div>
-                            <div
-                              style={{
-                                ...styles.optionContainer,
-                                display: "flex",
-                                // flexDirection: "row",
-                              }}
-                            >
-                              <p style={styles.options}>C.</p>
-                              <img
-                                style={styles.optionsImage2}
-                                src={
-                                  import.meta.env.VITE_IMAGE_URL + item.option_3
-                                }
-                                alt=""
-                              />
-                            </div>
-                            <div
-                              style={{
-                                ...styles.optionContainer,
-                                display: "flex",
-                                // flexDirection: "row",
-                              }}
-                            >
-                              <p style={styles.options}>D.</p>
-                              <img
-                                style={styles.optionsImage2}
-                                src={
-                                  import.meta.env.VITE_IMAGE_URL + item.option_4
-                                }
-                                alt=""
-                              />
-                            </div>
-                          </div>
-                        ) : (
+                        {item?.option_1 && (
                           <>
                             <p
                               style={styles.options}
