@@ -28,7 +28,6 @@ const Checkout = ({
   const [orderID, setOrderID] = useState("");
   const navigate = useNavigate();
 
-
   const purchaseMU = useMutation({
     mutationFn: async ({
       p_id,
@@ -39,8 +38,8 @@ const Checkout = ({
     }) => {
       // console.log(p_id);
       return await tokenAxios.post(`add-user-purchase`, {
-        p_id:p_id,
-        order_id:order_id,
+        p_id: p_id,
+        order_id: order_id,
       });
     },
     onSuccess: (res: any) => {
@@ -58,7 +57,7 @@ const Checkout = ({
   });
 
   const createOrder = (data: any, actions: any) => {
-    console.log("ssssssssssss"+amount);
+    console.log("ssssssssssss" + amount);
     return actions.order
       .create({
         purchase_units: [
@@ -93,7 +92,7 @@ const Checkout = ({
 
   useEffect(() => {
     if (success) {
-      purchaseMU.mutate({p_id:cartData,order_id:orderID});
+      purchaseMU.mutate({ p_id: cartData, order_id: orderID });
       handleClose();
       // alert("Payment successful!!");
       console.log("Order successful . Your order id is--", orderID);
@@ -130,7 +129,6 @@ const Checkout = ({
             style={{ layout: "vertical" }}
             createOrder={createOrder}
             onApprove={onApprove}
-            
           />
         </Box>
       </DialogContent>

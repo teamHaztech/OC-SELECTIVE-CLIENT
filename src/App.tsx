@@ -92,7 +92,7 @@ function App() {
         // text="Back to Dashboard"
         // link="/"
       />
-      <PayPalScriptProvider  options={initialOptions}>
+      <PayPalScriptProvider options={initialOptions}>
         <MainCartContext>
           <Routes>
             <Route path="/*" element={<Index />} />

@@ -28,6 +28,7 @@ type mapData = {
   Options: string[];
   Question: string;
   images: string[];
+  images: string[];
 };
 
 interface ThinkingProps {

@@ -98,7 +98,7 @@ const ViewProductDetail = () => {
       tsc_id,
     }: {
       p_id: number | String;
-      tsc_id: number;
+      tsc_id: number | string;
     }) => {
       // console.log(p_id, tsc_id);
 

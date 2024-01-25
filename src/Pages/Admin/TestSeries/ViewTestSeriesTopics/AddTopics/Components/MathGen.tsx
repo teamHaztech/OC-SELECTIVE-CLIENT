@@ -17,6 +17,7 @@ type mapData = {
   Options: string[];
   Question: string;
   images: string[];
+  images: string[];
 };
 
 interface MathProps {
@@ -75,6 +76,7 @@ const MathGen = ({
       return await adminTokenAxios.get(`/admin/get-image/${category}`);
     },
     // enabled: !!category,
+    // enabled: !!category,
   });
   let image_data = data?.data.images;
   // console.log(image_data);
@@ -84,6 +86,7 @@ const MathGen = ({
   // console.log(image_keyword);
   const addTestCTMu = useMutation({
     mutationFn: async (data: object[]) => {
+      // console.log(data);
       // console.log(data);
 
       return await adminTokenAxios.post(`/admin/add-test-series-topics`, {
@@ -99,6 +102,7 @@ const MathGen = ({
     },
     onSuccess: (res: any) => {
       if (res.status == 200) {
+        // console.log(res);
         // console.log(res);
         handleAlertBoxOpen2();
         // navigate(`/admin/test-series/view-test-series-topics`);
@@ -299,6 +303,7 @@ const MathGen = ({
         // throw "error"
       } catch (e) {
         setErrMessage(`Something went wrong. Please try again`);
+        setErrMessage(`Something went wrong. Please try again`);
         handleAlertBoxOpen();
       }
       // console.log(message);
@@ -332,6 +337,7 @@ const MathGen = ({
 
             if (match) {
               item.images.push(search.image_url); // Add the image URL to the question
+              item.images.push(search.image_url); // Add the image URL to the question
             }
           }
         );
@@ -341,16 +347,20 @@ const MathGen = ({
         // if (item.images?.length === 0) {
         //   delete item.images;
         // }
+        // if (item.images?.length === 0) {
+        //   delete item.images;
+        // }
 
         responses.push(item); // Add the modified item to the responses array
       });
+      // console.log("final", responses);
       // console.log("final", responses);
       return responses;
     },
 
     onSuccess: (data: any) => {
       setResData(data);
-      console.log("Success Data", data);
+      // console.log("Success Data", data);
     },
     onError: (error) => {
       // console.log(error);
