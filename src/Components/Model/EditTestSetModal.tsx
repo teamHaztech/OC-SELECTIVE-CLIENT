@@ -20,6 +20,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import adminTokenAxios from "../../Hooks/AdminTokenAxios";
 import { useParams } from "react-router-dom";
 import LoadingBar from "../Headers/LoadingBar";
+import AlertBox from "../Common/AlertBox";
 
 const style = {
   position: "absolute" as "absolute",
@@ -61,6 +62,8 @@ const EditTestSetModal = ({
 }: //   handleSubmit,
 ModalProps) => {
   const [counter, setCounter] = useState(1);
+  const [openStatus, setOpenStatus] = useState(false);
+  const [message, setMessage] = useState("");
   const para = useParams();
   const queryClient = useQueryClient();
   const p_id = para.productdetails;
@@ -83,7 +86,7 @@ ModalProps) => {
   const ts_id = getProductDetail.ts_id;
 
   const getTopics = useQuery({
-    queryKey: ["topicEdit", tsc, ts_id,getProductDetail],
+    queryKey: ["topicEdit", tsc, ts_id, getProductDetail],
     queryFn: async () => {
       const res = await adminTokenAxios.get(
         `admin/show-topics/${tsc}/${ts_id}`
@@ -119,8 +122,8 @@ ModalProps) => {
   //   "ViewProductDetails1",
   //   p_id,
   // ]);
-  console.log(122, getProductDetail.categories);
-
+  // console.log(122, getProductDetail.categories);
+  console.log(getProductDetail);
   const updateTestSeriesSets = useMutation({
     mutationFn: async (formattedDatav2: any) => {
       return await adminTokenAxios.put(
@@ -129,28 +132,40 @@ ModalProps) => {
       );
     },
     onError: (error: any) => {
-      console.error("Error creating user:", error.response?.data);
+      console.error("Error creating user:", error);
     },
     onSuccess: (res: any) => {
       // let data = res?.data.categories_data;
-      console.log("mutation", res.data);
-      reset();
-     
-      handleClick();
-      // setCounter(counter + 1);
+      if (res.status == 200) {
+        setMessage("Successfully Updated");
+        setOpenStatus(true);
+        console.log("mutation", res);
+        reset();
 
-      getProductDetail.categories = getProductDetail.categories.map((item: any) => {
-        console.log(item.id , res.data.set_data.id);
+        handleClick();
+        // setCounter(counter + 1);
+        getProductDetail.categories = res.data.set_data
         
-        return item.id === res.data.set_data.id ? res.data.set_data : item;
-      });
-      
+        // getProductDetail.categories = getProductDetail.categories.map(
+        //   (item: any) => {
+        //     // console.log(item.id , res.data.set_data.id);
 
-      // console.log(154, getProductDetail.categories);
-      queryClient.setQueryData(["ViewProductDetails1", p_id], getProductDetail);
+        //     return item.id === res.data.set_data.id ? res.data.set_data : item;
+        //   }
+        // );
+
+        // console.log(154, getProductDetail.categories);
+        queryClient.setQueryData(
+          ["ViewProductDetails1", p_id],
+          getProductDetail
+        );
+      } else {
+        setMessage("Cannot Update Set User has purchased");
+        setOpenStatus(true);
+      }
     },
   });
-  console.log(162, getProductDetail.categories);
+  // console.log(162, getProductDetail.categories);
   // const selectedCategories = Object.keys(categoryObj);
   // console.log("selectedCategories", selectedCategories);
 
@@ -189,9 +204,16 @@ ModalProps) => {
   //   return <LoadingBar />;
   // }
 
-  // console.log("MODAL", categoryObj, data);
+  console.log(updateTestSeriesSets.data);
+  let typeStatus = updateTestSeriesSets.data?.status;
   return (
     <div>
+      <AlertBox
+        type={typeStatus == 200 ? "success" : "error"}
+        name={message}
+        bol={openStatus}
+        handleAlertBoxClose={() => setOpenStatus(false)}
+      />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -263,7 +285,11 @@ ModalProps) => {
 
                     <OButton3
                       type="submit"
-                      name="Submit"
+                      name={
+                        updateTestSeriesSets.isLoading
+                          ? "Updating..."
+                          : "Update"
+                      }
                       css={{ marginTop: "1rem" }}
                     />
                   </Stack>

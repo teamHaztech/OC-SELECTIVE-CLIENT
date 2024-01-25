@@ -76,6 +76,9 @@ const ViewTestSeriesTopics = () => {
           </Box>
 
           <Stack direction="row" spacing={1}>
+          <Link to="non-verbal">
+              <OButton name="Add Non Verbal" />
+            </Link>
             <Link to="add-topics">
               <OButton name="Add Topics" />
             </Link>

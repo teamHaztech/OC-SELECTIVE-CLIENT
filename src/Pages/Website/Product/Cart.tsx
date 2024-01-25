@@ -129,7 +129,8 @@ const Cart = () => {
   filter_data = data?.data.product_data.filter((item: any) => {
     return cart.includes(item.id);
   });
-
+  console.log(filter_data,cart,data?.data.product_data);
+  
   let arr: number[] = [];
   let t_amount: number = 0;
   return (

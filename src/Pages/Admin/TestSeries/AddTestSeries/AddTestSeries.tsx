@@ -128,7 +128,7 @@ const AddTestSeries = () => {
     // formData.append("p_image", data.p_image[0]);
     // data = { ...data, p_image: data.p_image[0] };
     // formData.append("data", JSON.stringify(data));
-    // console.log("DATA", data);
+    console.log("DATA", data);
 
     try {
       await addTSProductMU.mutateAsync(data);
@@ -379,10 +379,10 @@ const AddTestSeries = () => {
               </Grid>
 
               {/* Product Image */}
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6}> 
                 <Controller
                   name="p_image"
-                  defaultValue=""
+              
                   // accept="image/*"
                   control={control}
                   render={({ field: { value, onChange, ...field } }) => (
@@ -395,6 +395,8 @@ const AddTestSeries = () => {
                         // variant="outlined"
                         value={value?.fileName}
                         onChange={(event: any) => {
+                          console.log(event);
+                          
                           onChange(event.target.files[0]);
                         }}
                         required

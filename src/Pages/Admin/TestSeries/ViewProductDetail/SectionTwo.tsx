@@ -165,7 +165,7 @@ const SectionTwo = ({
     "ViewProductDetails1",
     p_id,
   ]);
-  console.log(getProductDetail);
+  // console.log(getProductDetail);
   
   return (
     <>
@@ -293,7 +293,7 @@ const SectionTwo = ({
                           <DownloadPDF
                             bol={true}
                             data={set?.questions}
-                            randomG={true}
+                            randomG={false}
                             total={set?.questions?.length}
                             topic={setData?.t_name}
                             set={true}

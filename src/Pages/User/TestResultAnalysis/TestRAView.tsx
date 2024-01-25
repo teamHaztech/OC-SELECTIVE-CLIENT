@@ -62,7 +62,7 @@ const TestRAView = () => {
         const response = await tokenAxios.get(
           `/get-percentage-rank/${id}/${user?.id}`
         );
-        console.log(" getPecentageAndRankQuery", response.data);
+        // console.log(" getPecentageAndRankQuery", response.data);
 
         return response.data;
       } catch (error) {

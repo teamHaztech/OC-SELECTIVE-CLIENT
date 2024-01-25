@@ -11,7 +11,7 @@ import NonVerbalPDF from "./NonVerbalPDF";
 const ComponentToPrint = React.forwardRef((props: any, ref: any) => {
   const { cateId, NVId,selected_question } = props;
   // console.log("DATA", selected_question);
-  console.log(cateId,selected_question );
+  // console.log(cateId,selected_question );
 
   return (
     <div ref={ref}>

@@ -6,15 +6,23 @@ import Fade from "@mui/material/Fade";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { FormLabel, Stack } from "@mui/material";
+import {
+  FormControl,
+  FormLabel,
+  Grid,
+  MenuItem,
+  Select,
+  Stack,
+} from "@mui/material";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import CSVParser from "../../Pages/Admin/TestSeries/Components/CSVParser";
 import GenerateQuestions from "../../Pages/Admin/TestSeries/Components/GenerateQuestions";
 import MathGen from "../../Pages/Admin/TestSeries/ViewTestSeriesTopics/AddTopics/Components/MathGen";
 import Reading from "../../Pages/Admin/TestSeries/ViewTestSeriesTopics/AddTopics/Components/Reading";
 import Thinking from "../../Pages/Admin/TestSeries/ViewTestSeriesTopics/AddTopics/Components/Thinking";
+import { Controller, useForm } from "react-hook-form";
 
 const style = {
   position: "absolute" as "absolute",
@@ -43,7 +51,9 @@ interface ModalProps {
   topicId?: number | string;
   setTopic?: any;
 }
-
+type FormValues = {
+  total_questions: string | number;
+};
 const UploadModal = ({
   open,
   handleClose,
@@ -55,8 +65,17 @@ const UploadModal = ({
 }: ModalProps) => {
   // const [result, setResult] = useState<any>(null);
   const [csvData, setCsvData] = useState<any>([]);
-  // console.log("topicId", topicId);
+  console.log("topicId", topicId, topic);
+  const {
+    control,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>();
+  topic[2] =  watch("total_questions");
 
+
+  // console.log("topicId", topic);
   return (
     <div>
       <Modal
@@ -107,6 +126,40 @@ const UploadModal = ({
                   Upload
                 </Button>
               </Stack> */}
+            {(topic[0] == "1" || topic[0] == "3") && (
+              <Grid item xs={12} sm={4}>
+                <Stack spacing={1}>
+                  <FormLabel
+                    sx={{ fontWeight: "900", fontSize: "1.1rem" }}
+                    id="demo-controlled-open-select-label"
+                  >
+                    Total Questions
+                  </FormLabel>
+                  <Controller
+                    name="total_questions"
+                    control={control}
+                    defaultValue={""}
+                    disabled={topic[0] == "2"}
+                    render={({ field }) => (
+                      <FormControl fullWidth>
+                        <Select {...field} placeholder="Enter Total Questions">
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          {}
+                          <MenuItem value={10}>10</MenuItem>
+                          <MenuItem value={15}>15</MenuItem>
+                          <MenuItem value={20}>20</MenuItem>
+                          <MenuItem value={25}>25</MenuItem>
+                          <MenuItem value={30}>30</MenuItem>
+                          <MenuItem value={50}>50</MenuItem>
+                        </Select>
+                      </FormControl>
+                    )}
+                  />
+                </Stack>
+              </Grid>
+            )}
             {topic[0] == 3 && (
               <Stack spacing={1}>
                 <FormLabel
@@ -134,6 +187,7 @@ const UploadModal = ({
             {topic[0] == 1 && (
               <MathGen
                 formData={topic}
+                topicId={topicId}
                 // reset={reset}
                 edit={true}
               />
@@ -152,6 +206,7 @@ const UploadModal = ({
                 csvData={csvData}
                 setCsvData={setCsvData}
                 // reset={reset}
+                topicId={topicId}
                 edit={true}
               />
             )}

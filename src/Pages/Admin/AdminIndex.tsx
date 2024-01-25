@@ -151,7 +151,7 @@ const AdminIndex = () => {
             text="Back to Dashboard"
             link="/user"
           />
-          <EditProduct />
+          
           <Container
             maxWidth={false}
             sx={{
@@ -171,6 +171,8 @@ const AdminIndex = () => {
       <Route path='/profile' element={<ProfileIndex />} />
       <Route path='/Test-result-analysis' element={<TestRA />} /> */}
               {/* <Route path="/login" element={<LoginComponent />} /> */}
+              {/* <Route path="/" element={<AdminMainDash />} /> */}
+            
               <Route index element={<AdminMainDash />} />
               <Route path="/profile" element={<AdminProfile />} />
               <Route path="/students" element={<StudentData />} />
@@ -215,9 +217,9 @@ const AdminIndex = () => {
                 element={<ViewTopicDetail />}
               />
 
-              <Route path="/non-verbal" element={<NonVebal />} />
+              <Route path="/view-topics/non-verbal" element={<NonVebal />} />
 
-              <Route path="*" element={<ErrorPage />} />
+              <Route path="*" element={<AdminMainDash />} />
             </Routes>
           </Container>
         </>

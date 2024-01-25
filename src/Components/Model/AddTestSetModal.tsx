@@ -19,6 +19,7 @@ import { OButton3 } from "../Common/Button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import adminTokenAxios from "../../Hooks/AdminTokenAxios";
 import { useParams } from "react-router-dom";
+import AlertBox from "../Common/AlertBox";
 
 const style = {
   position: "absolute" as "absolute",
@@ -74,7 +75,9 @@ ModalProps) => {
     "ViewProductDetails1",
     p_id,
   ]);
-
+  // console.log(updatedData?.categories);
+  const [openStatus, setOpenStatus] = useState(false);
+  const [message, setMessage] = useState("");
   const addTestSeriesProductSetMutation = useMutation({
     mutationFn: async (formattedDatav2: any) => {
       return await adminTokenAxios.post(
@@ -86,19 +89,32 @@ ModalProps) => {
       console.error("Error creating user:", error.response?.data);
     },
     onSuccess: (res: any) => {
-      let data = res?.data.categories_data;
-      reset();
-      setCounter(counter + 1);
-      console.log(updatedData?.categories);
-      updatedData &&
-        updatedData.categories?.map((item: any, key: number) => {
-          data.map((item2: any) => {
-            if (item.id == item2.id) {
-              updatedData.categories[key] = item2;
-            }
+      if(res.status == 200){
+        setMessage("Successfully Added New Set");
+        setOpenStatus(true);
+        let data = res?.data.categories_data;
+        reset();
+        setCounter(counter + 1);
+        console.log(updatedData?.categories, res?.data);
+  
+        updatedData &&
+          updatedData.categories?.map((item: any, key: number) => {
+            // console.log(item);
+  
+            return data?.map((item2: any) => {
+              // console.log(item2);
+              if (item.id == item2.id) {
+                return (updatedData.categories[key] = item2);
+              }
+              return item;
+            });
           });
-        });
-      queryClient.getQueryData(["ViewProductDetails1", p_id], updatedData);
+        // console.log(newData);
+        queryClient.getQueryData(["ViewProductDetails1", p_id], updatedData);
+      }else{
+        setMessage("Not Able add New Set");
+        setOpenStatus(true);
+      }
     },
   });
 
@@ -123,7 +139,7 @@ ModalProps) => {
 
     try {
       await addTestSeriesProductSetMutation.mutateAsync(formattedDatav2);
-      console.log("Data submitted successfully", formattedDatav2);
+      // console.log("Data submitted successfully", formattedDatav2);
     } catch (error) {
       // The error will be handled by the onError callback in the mutation options
     }
@@ -140,10 +156,16 @@ ModalProps) => {
     restAddProduct?.();
     handleClose?.();
   };
-
-  // console.log("MODAL", categoryObj, data);
+  let typeStatus = addTestSeriesProductSetMutation.data?.status;
+  // console.log("MODAL", categoryObj, data,ts_id);
   return (
     <div>
+        <AlertBox
+        type={typeStatus == 200 ? "success" : "error"}
+        name={message}
+        bol={openStatus}
+        handleAlertBoxClose={() => setOpenStatus(false)}
+      />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -220,7 +242,11 @@ ModalProps) => {
 
                 <OButton3
                   type="submit"
-                  name="Submit"
+                  name={
+                    addTestSeriesProductSetMutation.isLoading
+                      ? "Submitting..."
+                      : "Submit"
+                  }
                   css={{ marginTop: "1rem" }}
                 />
               </Stack>

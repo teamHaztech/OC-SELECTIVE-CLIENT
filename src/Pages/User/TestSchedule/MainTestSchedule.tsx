@@ -20,6 +20,8 @@ import axiosBaseURL from "../../../Hooks/BaseUrl";
 import { MRT_ColumnDef } from "material-react-table";
 import AdvanceTable from "../../Admin/components/AdvanceTable";
 import { useNavigate } from "react-router-dom";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import Tooltip from "@mui/material/Tooltip";
 
 const header = [
   "#",
@@ -46,7 +48,8 @@ type Purchases = {
   valid_till: string;
   tsc_type: string;
   duration: number;
-  package_name:string;
+  complete_status: number;
+  package_name: string;
 };
 
 const MainTestSchedule = () => {
@@ -61,7 +64,7 @@ const MainTestSchedule = () => {
   const { isLoading, data } = useQuery([selectVal, "purchases"], () =>
     tokenAxios.get(`/get-user-purchases/${selectVal}`)
   );
-// console.log(data);
+  // console.log(data);
 
   const TestMU = useMutation({
     mutationFn: async (data: mUData) => {
@@ -74,8 +77,8 @@ const MainTestSchedule = () => {
       console.log(response);
 
       // navigate(`/user/Test-schedule/Test-section/${response.data.uts_id}`);
-      let url =`/#/user/Test-schedule/Test-section/${response.data.uts_id}`;
-      window.open(url, '_blank', 'width=1400,height=600');
+      let url = `/#/user/Test-schedule/Test-section/${response.data.uts_id}`;
+      window.open(url, "_blank", "width=1400,height=600");
     },
   });
 
@@ -111,7 +114,7 @@ const MainTestSchedule = () => {
         header: "Subject",
         size: 50,
       },
-    
+
       {
         accessorKey: "duration",
         header: "Time Limit",
@@ -136,26 +139,46 @@ const MainTestSchedule = () => {
       },
       {
         accessorKey: "id",
-        header: "",
+        header: "Status",
         size: 50,
-        Cell: ({ cell, row }: any) => (
+        Cell: ({ cell, row }: any) =>
           // <Link to={`${cell.getValue()}`}>
-          <EventAvailableIcon
-            sx={{
-              width: "25px",
-              height: "25px",
-              color: "#3A9BDC",
-              cursor: "pointer",
-            }}
-            onClick={() =>
-              TestMU.mutate({
-                ps_id: row.original.purchase_id,
-                set_id: cell.getValue(),
-              })
-            }
-          />
-          // </Link>
-        ),
+          row.original.complete_status ? (
+            <Tooltip title="Retake Test" arrow>
+              <EventAvailableIcon
+                sx={{
+                  width: "25px",
+                  height: "25px",
+                  color: "green",
+                  cursor: "pointer",
+                }}
+                onClick={() =>
+                  TestMU.mutate({
+                    ps_id: row.original.purchase_id,
+                    set_id: cell.getValue(),
+                  })
+                }
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Take Test" arrow>
+              <CalendarTodayIcon
+                sx={{
+                  width: "25px",
+                  height: "25px",
+                  color: "#3A9BDC",
+                  cursor: "pointer",
+                }}
+                onClick={() =>
+                  TestMU.mutate({
+                    ps_id: row.original.purchase_id,
+                    set_id: cell.getValue(),
+                  })
+                }
+              />
+            </Tooltip>
+          ),
+        // </Link>
         enableSorting: false,
         muiTableHeadCellProps: {
           align: "center",
@@ -170,9 +193,7 @@ const MainTestSchedule = () => {
 
   // console.log("Test schedule", data?.data?.tsp);
 
-  if (isLoading) {
-    return <LoadingBar />;
-  }
+
 
   const props = {
     columns: columns,
@@ -233,7 +254,8 @@ const MainTestSchedule = () => {
             <TestPurchasesTable data={data?.data?.tsp} />
           </Table>
         </TableContainer> */}
-        <AdvanceTable {...props} />
+    
+        {isLoading ? <LoadingBar /> :<AdvanceTable {...props} />}
         {/* </Card> */}
       </Stack>
     </Container>

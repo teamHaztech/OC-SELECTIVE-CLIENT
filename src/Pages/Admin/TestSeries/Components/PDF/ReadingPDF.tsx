@@ -169,9 +169,9 @@ const ReadingPDF = ({ props }: any) => {
                             key + 1 == index_data?.start ? "page" : "avoid",
                         }}
                       >
-                        <Typography
+                        {/* <Typography
                           marginBottom={1}
-                        >{`Read the extracts below then answer the question`}</Typography>
+                        >{`Read the extracts below then answer the question`}</Typography> */}
                         {/* <Typography
                           textAlign={"center"}
                           fontSize={"30px"}
@@ -264,7 +264,7 @@ const ReadingPDF = ({ props }: any) => {
                       //     : "page-break-inside: avoid"
                       // }`}
                     >
-                      {key + 1 == index_data?.start && item?.paragraph && (
+                      {/* {key + 1 == index_data?.start && item?.paragraph && (
                         <Stack spacing={2} marginTop={16}>
                           <ParaText4
                             text={
@@ -279,7 +279,7 @@ const ReadingPDF = ({ props }: any) => {
                             }
                           />
                         </Stack>
-                      )}
+                      )} */}
 
                       {item.question && (
                         <Stack

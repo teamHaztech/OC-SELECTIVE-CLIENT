@@ -25,8 +25,8 @@ interface QuestionCardProps {
   answer: string;
   explanation: string;
   index: number;
-  data:any,
-  updateData:any
+  data: any;
+  updateData: any;
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -40,13 +40,16 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   explanation,
   images,
   index,
-  data
+  data,
 }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = (index: number) => {
     setOpen(true);
   };
-
+  const handleDelete = (index: number) => {
+    const newArray = data.filter((item: any, key: number) => key != index);
+    updateData(newArray);
+  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -73,16 +76,24 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           {images && images.length !== 0 && (
             <ImageList
               sx={{
-                width: "100%",
+                width: "80%",
                 // maxHeight: "340px",
                 maxWidth: "hidden",
                 flex: "column",
+                display: "flex",
+                flexDirection: "row",
                 justifyContent: "space-between",
               }}
               cols={3}
             >
               {images.map((item: any, key: number) => (
-                <ImageListItem key={key} sx={{ width: "200px" }}>
+                <ImageListItem
+                  key={key}
+                  sx={{
+                    width: "200px",
+                
+                  }}
+                >
                   <img
                     src={import.meta.env.VITE_IMAGE_URL + item}
                     alt={`Image ${import.meta.env.VITE_IMAGE_URL + item}`}
@@ -107,12 +118,21 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           <Typography variant="body2" component="p">
             Explanation: {explanation}
           </Typography>
-          
         </CardContent>
-        <BButton name="edit" func={() => handleOpen(index)} css={{margin:"10px"}}/>
+        <BButton
+          name="edit"
+          func={() => handleOpen(index)}
+          css={{ margin: "10px" }}
+        />
+        <BButton
+          name="Delete"
+          func={() => handleDelete(index)}
+          css={{ margin: "10px" }}
+        />
       </Card>
+
       <EditQuestion
-      updateData={updateData}
+        updateData={updateData}
         open={open}
         handleClose={handleClose}
         data={{

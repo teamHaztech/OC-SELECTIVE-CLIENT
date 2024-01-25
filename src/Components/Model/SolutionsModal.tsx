@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { ConverationComp, ParaText3, ParaText4 } from "../Common/ParaText";
 import { Controller, useForm } from "react-hook-form";
+import AlertBox from "../Common/AlertBox";
 
 const style = {
   position: "absolute" as "absolute",
@@ -62,6 +63,35 @@ export default function SolutionsModal({
   index,
   indexID,
 }: ModalProps) {
+  document.addEventListener("contextmenu", (e: any) => e.preventDefault());
+ 
+
+
+  document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key == "p") {
+      setOpenModel(true);
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  });
+  function ctrlShiftKey(e: any, keyCode: any) {
+    return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+  }
+
+  document.onkeydown = (e: any) => {
+    if (
+      ctrlShiftKey(e, "I") ||
+      ctrlShiftKey(e, "J") ||
+      ctrlShiftKey(e, "C") ||
+      (e.ctrlKey && e.keyCode === "U".charCodeAt(0))
+    )
+      return false;
+  };
+  const preventCopyPaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    alert("Copying and pasting is not allowed!");
+  };
+
   const { control } = useForm<Inputs>();
 
   const handleClose = () => {
@@ -80,9 +110,9 @@ export default function SolutionsModal({
   // console.log("sa", data?.data?.questions.questions);
   const qData = data?.data?.questions.questions;
   const qData2 = data?.data?.questions;
-  if (isLoading) {
-    return <LoadingBar />;
-  }
+  // if (isLoading) {
+  //   return <LoadingBar />;
+  // }
   // let new_index: any;
   // if (index.length != 0) {
   //   let count = 1;
@@ -103,13 +133,22 @@ export default function SolutionsModal({
   // console.log(
   //   index?.find((item: any) => item?.element.includes(indexID + 1))
   // );
-  const index_data:any = index?.find((item: any) =>
+  const index_data: any = index?.find((item: any) =>
     item.element.includes(parseInt(indexID) + 1)
   );
   console.log(index);
-
+  const [openModel, setOpenModel] = React.useState<boolean>(false);
+  const handleAlertModelBoxClose = () => {
+    setOpenModel(false);
+  };
   return (
     <div>
+      <AlertBox
+        name={`Not Allowed`}
+        type="error"
+        bol={openModel}
+        handleAlertBoxClose={handleAlertModelBoxClose}
+      />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -122,6 +161,8 @@ export default function SolutionsModal({
             timeout: 500,
           },
         }}
+        className="prevent-select"
+        onCopy={(e) => preventCopyPaste(e)}
       >
         <Fade in={open}>
           <Box sx={style}>
@@ -187,9 +228,14 @@ export default function SolutionsModal({
                     {!!qData?.conversation || !!qData?.paragraph ? (
                       <>
                         {qData?.paragraph && (
-                          <ParaText4
-                            text={qData?.paragraph}
-                            css={{ fontWeight: "400", marginBottom: "10px" }}
+                          // <ParaText4
+                          //   text={qData?.paragraph}
+                          //   css={{ fontWeight: "400", marginBottom: "10px" }}
+                          // />
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: qData?.paragraph,
+                            }}
                           />
                         )}
                         {qData?.question_image &&

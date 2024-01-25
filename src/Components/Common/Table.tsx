@@ -4,13 +4,14 @@ import {
   TableRow,
   TableBody,
   Button,
+  Tooltip,
 } from "@mui/material";
 import { ParaText3, ParaText1 } from "./ParaText";
 import FindInPageOutlinedIcon from "@mui/icons-material/FindInPageOutlined";
 import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import tokenAxios from "../../Hooks/TokenAxios";
-
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 interface headerProps {
   header: Array<string>;
 }
@@ -65,12 +66,13 @@ const TableData = (props: dataProps) => {
       window.open(url, "_blank", "width=1400,height=600");
     },
   });
+  // console.log(props.data?.length);
 
   return (
     <TableBody>
-      {props.data?.length === 0 ? (
+      {!props.data || props.data?.length === 0 ? (
         <TableRow>
-          <TableCell align="center" sx={{ border: 0 }} colSpan={7}>
+          <TableCell align="center" sx={{ border: 0 }} colSpan={8}>
             No Item Found
           </TableCell>
         </TableRow>
@@ -83,32 +85,34 @@ const TableData = (props: dataProps) => {
               <TableCell align="center" sx={{ border: 0 }}>
                 {key + 1}
               </TableCell>
-              {temp.map((val: any, key: number) => {
-                return (
-                  <TableCell key={key} align="center" sx={{ border: 0 }}>
-                    <ParaText1 text={val} />
-                  </TableCell>
-                );
-              })}
+              {temp.map((val: any, key: number) => (
+                <TableCell key={key} align="center" sx={{ border: 0 }}>
+                  <ParaText1 text={val} />
+                </TableCell>
+              ))}
               <TableCell align="center" sx={{ border: 0 }}>
                 {props?.third ? (
                   <Link to="Test-schedule">
-                    <FindInPageOutlinedIcon
-                      sx={{ width: "25px", height: "25px", color: "#3A9BDC" }}
-                      onClick={() =>
-                        TestMU.mutate({
-                          ps_id: props.psId,
-                          set_id: item.id,
-                        })
-                      }
-                    />
+                    <Tooltip title="Take Test" arrow>
+                      <EventAvailableIcon
+                        sx={{ width: "25px", height: "25px", color: "#3A9BDC" }}
+                        onClick={() =>
+                          TestMU.mutate({
+                            ps_id: props.psId,
+                            set_id: item.id,
+                          })
+                        }
+                      />
+                    </Tooltip>
                   </Link>
                 ) : (
-                  <Link to={`${props.url}/${item.id}`}>
-                    <FindInPageOutlinedIcon
-                      sx={{ width: "25px", height: "25px", color: "#3A9BDC" }}
-                    />
-                  </Link>
+                  <Tooltip title="View" arrow>
+                    <Link to={`${props.url}/${item.id}`}>
+                      <FindInPageOutlinedIcon
+                        sx={{ width: "25px", height: "25px", color: "#3A9BDC" }}
+                      />
+                    </Link>
+                  </Tooltip>
                 )}
               </TableCell>
             </TableRow>

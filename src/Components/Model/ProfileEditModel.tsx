@@ -66,7 +66,7 @@ const ProfileEditModal = () => {
       }
     },
   });
-  console.log(updateUserMu.isLoading);
+  // console.log(updateUserMu.isLoading);
   // const { data, isLoading } = useQuery(["user-data", user], async () => {
   //   return await tokenAxios.get("/user");
   // });

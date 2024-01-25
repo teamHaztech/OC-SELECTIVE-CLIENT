@@ -50,7 +50,7 @@ const FirstSection = ({ data }: any) => {
   // "Remaining_test": 7
 
   const card_content: content[] = [
-    { title: "TOTAL EXAM", name: data?.data?.total_test },
+    { title: "TOTAL EXAMS", name: data?.data?.total_test },
     { title: "COMPLETED EXAMS", name: data?.data?.complete_test },
     { title: "INCOMPLETED EXAMS", name: data?.data?.incomplete_test },
     { title: "REMAINING EXAMS", name: data?.data?.Remaining_test },

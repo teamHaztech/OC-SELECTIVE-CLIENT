@@ -15,6 +15,7 @@ const header = [
   "Valid till",
   "Subject",
   "Duration",
+  "Status"
 ];
 
 // const tableData = [
@@ -33,7 +34,7 @@ const ThirdSection = ({ data }: any) => {
   }
 
   console.log("third section", data.data);
-
+  const test_data = data.data
   return (
     <Container maxWidth="xl">
       <Header1 header="Test Schedule" />
@@ -42,8 +43,8 @@ const ThirdSection = ({ data }: any) => {
           <Table sx={{ minWidth: 650 }}>
             <TableHeader header={header} />
             <TableData
-              data={data?.data?.tsp}
-              psId={data?.data?.ps_id}
+              data={test_data?.tsp}
+              psId={test_data?.ps_id}
               third={true}
             />
           </Table>
@@ -51,7 +52,7 @@ const ThirdSection = ({ data }: any) => {
       </Card>
       <Box sx={{ width: "344px", mx: "auto" }}>
         <Link to="Test-schedule">
-          <OButton2 name="VIEW MORE" css={{ maxWidth: "344px" }} />
+          {test_data.tsp && <OButton2 name="VIEW MORE" css={{ maxWidth: "344px" }} />}
         </Link>
       </Box>
     </Container>

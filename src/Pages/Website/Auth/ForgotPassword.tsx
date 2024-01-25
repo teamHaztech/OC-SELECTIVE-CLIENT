@@ -7,7 +7,7 @@ import { Input } from "../../../Components/Common/Input";
 import LoadingBar from "../../../Components/Headers/LoadingBar";
 import { OButton2 } from "../../../Components/Common/Button";
 import OTP from "./OTP";
-
+import emailjs from "@emailjs/browser";
 interface Props {
   setShowForgotPassword: any;
 }
@@ -23,22 +23,61 @@ const ForgotPassword = ({ setShowForgotPassword }: Props) => {
   const onSubmit: SubmitHandler<Inputs> = async (para_data: Inputs) => {
     getOtpMU.mutate(para_data);
   };
-
+  // console.log(otp);
+  
+  const sendOTPMail = ({
+    para_otp,
+    email,
+  }: {
+    para_otp: string | number;
+    email: string;
+  }) => {
+    const OTPDetails = {
+      user_email: email,
+      otp: para_otp,
+    };
+    console.log(OTPDetails);
+    emailjs
+      .send(
+        import.meta.env.VITE_EMAILJS_SERVICEID,
+        import.meta.env.VITE_MAILJS_OTP_TEMPLATEID,
+        OTPDetails,
+        import.meta.env.VITE_MAILJS_PUBLIC_KEY
+      )
+      .then(
+        (result) => {
+          // console.log(result.text);
+        },
+        (error) => {
+          console.log("error " + error.text);
+        }
+      );
+  };
   const getOtpMU = useMutation({
     mutationFn: async (data: Inputs) => {
-      console.log(data);
+      // console.log(data);
 
       return await axiosBaseURL.post("/send-otp-mail", data);
     },
+    onError: (err) => {
+      console.log("err " + err);
+    },
     onSuccess: (response) => {
-      console.log(response.data);
-      setOtp(response.data?.otp);
+      console.log("email:", response.data.email);
+      console.log("OTP:", response.data.otp);
+      // console.log("OTP:", response.status);
+      // console.log(JSON.stringify(response).data);
 
-      if (response.data?.message === "success") {
-        setEmail(response.data?.email);
+      if (response.status == 200) {
+        const email: string = response.data.email;
+        const otp: string = response.data.otp;
+        response.data.otp;
+        setOtp(otp);
+        setEmail(email);
         setEnterOtpForm(true);
+        sendOTPMail({ email: email, para_otp: otp });
       }
-      <Alert severity="success">OTP Send Check Your Email</Alert>;
+      // <Alert severity="success">OTP Sent Check Your Email</Alert>;
     },
   });
 
@@ -49,6 +88,8 @@ const ForgotPassword = ({ setShowForgotPassword }: Props) => {
           otpAPI={otp}
           email={email}
           setShowForgotPassword={setShowForgotPassword}
+          sendOTPMail={sendOTPMail}
+          mainSetOtp={setOtp}
         />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>

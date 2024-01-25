@@ -35,8 +35,9 @@ const options: any = {
   },
   scales: {
     y: {
-      beginAtZero: true,
+      beginAtZero: false,
     },
+    
   },
 };
 

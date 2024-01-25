@@ -96,7 +96,7 @@ const PasswordChangeModal = () => {
     setPasswordData(para_data);
   };
 
-console.log(passwordCheck?.data);
+// console.log(passwordCheck?.data);
 
   return (
     <Dialog onClose={handlePCClose} open={openPC}>

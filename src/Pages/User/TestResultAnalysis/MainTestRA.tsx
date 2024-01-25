@@ -5,6 +5,7 @@ import {
   Box,
   TableContainer,
   Table,
+  Tooltip,
 } from "@mui/material";
 import { useMemo, useState } from "react";
 import UseGet from "../../../Hooks/UseGet";
@@ -84,7 +85,7 @@ type Results = {
   total_marks: number;
   total_answered: number;
   q_id: number;
-  package_name:string;
+  package_name: string;
   set_name: string;
 };
 
@@ -203,24 +204,27 @@ const MainTestRA = () => {
       },
       {
         accessorKey: "id",
-        header: "",
+        header: "Status",
         size: 50,
         Cell: ({ cell, row }: any) => (
           <Link to={`view/${cell.getValue()}`}>
-            <FindInPageOutlinedIcon
-              sx={{
-                width: "25px",
-                height: "25px",
-                color: "#3A9BDC",
-                cursor: "pointer",
-              }}
-              // onClick={() =>
-              //   TestMU.mutate({
-              //     ps_id: row.original.purchase_id,
-              //     set_id: cell.getValue(),
-              //   })
-              // }
-            />
+            <Tooltip title="View" arrow>
+             
+              <FindInPageOutlinedIcon
+                sx={{
+                  width: "25px",
+                  height: "25px",
+                  color: "#3A9BDC",
+                  cursor: "pointer",
+                }}
+                // onClick={() =>
+                //   TestMU.mutate({
+                //     ps_id: row.original.purchase_id,
+                //     set_id: cell.getValue(),
+                //   })
+                // }
+              />
+            </Tooltip>
           </Link>
         ),
         enableSorting: false,
@@ -235,9 +239,9 @@ const MainTestRA = () => {
     []
   );
 
-  if (isLoading) {
-    return <LoadingBar />;
-  }
+  // if (isLoading) {
+  //   return <LoadingBar />;
+  // }
 
   const props = {
     columns: columns,
